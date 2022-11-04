@@ -6,5 +6,7 @@
   sysfonts::font_add(family = "FuturaStd", 
                      regular =  system.file("extdata/fonts", "FuturaStd-Medium.otf", package = "mapit"),
                      bold = system.file("extdata/fonts", "FuturaStd-Heavy.otf", package = "mapit"))
+  #cache
+  assign(".mapit.cache", new.env(), envir= asNamespace(pkgname))
   
 } # nocov end

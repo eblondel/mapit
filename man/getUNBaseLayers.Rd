@@ -11,7 +11,8 @@ an \code{list} of \pkg{sf} objects
 }
 \description{
 Get UN base layers as \pkg{sf} objects based on UN-FAO Fisheries & Aquaculture Division
- Geoserver (using the OGC WFS protocol).
+ Geoserver (using the OGC WFS protocol). Once retrieved, the layers will be cached internally to avoid
+ re-fetching layers each time.
 }
 \examples{
 \donttest{

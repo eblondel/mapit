@@ -3,7 +3,8 @@
 #' @title getUNBaseLayers
 #' @export
 #' @description Get UN base layers as \pkg{sf} objects based on UN-FAO Fisheries & Aquaculture Division
-#'  Geoserver (using the OGC WFS protocol).
+#'  Geoserver (using the OGC WFS protocol). Once retrieved, the layers will be cached internally to avoid
+#'  re-fetching layers each time.
 #'
 #' @usage getUNBaseLayers()
 #' 
@@ -15,6 +16,8 @@
 #' }
 #' 
 getUNBaseLayers <- function(){
+  
+  if(!is.null(.mapit.cache$layers)) return(.mapit.cache$layers)
   
   #ows4R connector
   WFS_UNFAO_NFI <- ows4R::WFSClient$new(
@@ -32,7 +35,7 @@ getUNBaseLayers <- function(){
   countries.sf <- WFS_UNFAO_NFI$getFeatures("fifao:country_bounds")
   sf::st_crs(countries.sf) <- 4326
   countries.sf <- sf::st_transform(countries.sf, "+proj=eck4")
-  #TODO harmonize M49 codes
+  countries.sf$rowid <- 1:nrow(countries.sf)
 
   #UN country members (lines)
   boundaries.sf <- WFS_UNFAO_NFI$getFeatures("fifao:UN_intbnd")
@@ -45,5 +48,6 @@ getUNBaseLayers <- function(){
     countries = countries.sf,
     boundaries = boundaries.sf
   )
+  .mapit.cache$layers <- layers
   return(layers)
 }

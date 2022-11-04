@@ -1,21 +1,21 @@
-#' @name getUNBaseLayers
-#' @aliases getUNBaseLayers
-#' @title getUNBaseLayers
+#' @name get_baselayers
+#' @aliases get_baselayers
+#' @title get_baselayers
 #' @export
 #' @description Get UN base layers as \pkg{sf} objects based on UN-FAO Fisheries & Aquaculture Division
 #'  Geoserver (using the OGC WFS protocol). Once retrieved, the layers will be cached internally to avoid
 #'  re-fetching layers each time.
 #'
-#' @usage getUNBaseLayers()
+#' @usage get_baselayers()
 #' 
 #' @return an \code{list} of \pkg{sf} objects
 #' 
 #' @examples
 #' \donttest{
-#'   layers = getUNBaseLayers()
+#'   layers = get_baselayers()
 #' }
 #' 
-getUNBaseLayers <- function(){
+get_baselayers <- function(){
   
   if(!is.null(.mapit.cache$layers)) return(.mapit.cache$layers)
   

@@ -10,6 +10,5 @@ spatialize_country_dataset(stats, by, variable, maptype, m49_codes_to_hide)
 an object from \pkg{sf}
 }
 \description{
-Get UN base layers as \pkg{sf} objects based on UN-FAO Fisheries & Aquaculture Division
- Geoserver (using the OGC WFS protocol).
+Spatializes a statistical country dataset
 }

@@ -2,8 +2,7 @@
 #' @aliases spatialize_country_dataset
 #' @title spatialize_country_dataset
 #' @export
-#' @description Get UN base layers as \pkg{sf} objects based on UN-FAO Fisheries & Aquaculture Division
-#'  Geoserver (using the OGC WFS protocol).
+#' @description Spatializes a statistical country dataset
 #'
 #' @usage spatialize_country_dataset(stats, by, variable, maptype, m49_codes_to_hide)
 #' 
@@ -11,7 +10,7 @@
 #' 
 spatialize_country_dataset <- function(stats, by, variable, maptype = "choropleth", m49_codes_to_hide = "010"){
   
-  layers <- getUNBaseLayers()
+  layers <- get_baselayers()
   sf <- layers$countries
   sf$surface <- sf::st_area(sf, by_element = TRUE)
   sf <- sf[!sf$M49 %in% m49_codes_to_hide,]

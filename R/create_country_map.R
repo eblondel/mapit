@@ -1,4 +1,9 @@
-#create_country_map
+#' @name create_country_map
+#' @aliases create_country_map
+#' @title create_country_map
+#' @export
+#' @description Creates a country map
+#'
 create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                                maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
                                col = "#08519C", pal = NULL, invertpal = FALSE,
@@ -75,7 +80,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
       }
       
       #enrich with class
-      sp <- enrichWithClasses(sp, classints, variable, maptype)
+      sf <- enrich_with_classes(sf, classints, variable, maptype)
     }                                                                        
   }    
   

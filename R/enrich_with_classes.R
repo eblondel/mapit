@@ -11,7 +11,7 @@
 enrich_with_classes <- function(sf, classints, variable, maptype, scale_factor = 1.5){
   outsf <- sf
   outsf$maptype <- maptype
-  levels <- as.matrix(attr(classIntervals2shingle(classints),"levels"))
+  levels <- as.matrix(attr(classInt::classIntervals2shingle(classints),"levels"))
   switch(maptype,
          "graduated_linear_symbols" = {
            outsf$CLASS <- 0

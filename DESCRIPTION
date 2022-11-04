@@ -9,7 +9,7 @@ Authors@R: c(
   person("Alexandre", "Bennici", role = c("ctb"), comment = c(ORCID = "0000-0003-2160-3487")))
 Maintainer: Emmanuel Blondel <emmanuel.blondel1@gmail.com>
 Depends: R (>= 4.0)
-Imports: sysfonts, showtext, sf, classInt
+Imports: sysfonts, showtext, sf, classInt, ows4R
 Suggests: testthat, roxygen2
 License: MIT + file LICENSE
 URL: https://github.com/eblondel/mapit, https://eblondel.github.io/mapit/

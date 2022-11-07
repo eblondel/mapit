@@ -14,7 +14,10 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                                add_disclaimers = TRUE,
                                add_copyright = TRUE,
                                add = FALSE,
-                               family=""){
+                               family = "FuturaStd"){
+  
+  showtext::showtext_auto()
+  par(family =  "Arial Unicode MS")
   
   #get layers
   layers <- get_baselayers()
@@ -115,5 +118,42 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
     plot(sf::st_centroid(sf), lty=0, bg=col, col = "white", pch = 21, cex = sf$CLASS, add = TRUE)
   }
   
+  if(!is.null(classints)){
+    
+    #legend for classes
+    classLeg = classints
+    if(!missing(digits)){
+      classLeg$brks<-round(classLeg$brks,digits)
+    } 
+    x<-print(classLeg,cutlabels=F,over=">",under="<")
+    label = paste(names(x), legendunit)
+    labelLength = nchar(label)
+    legendX <- -16800000
+    legendY <- -4000000
+    if(maptype == "choropleth"){
+      create_legend(legendX, legendY, fill=attr(classColours,"palette"), cex=0.8, y.intersp=1.5, 
+                    legend=label, text.width = labelLength, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+                    box.factor = 2,
+                    family = family, text.font = 1)
+      #legend for 'no data'
+      naLabel = "No Data"
+      naLabelLength = nchar(naLabel)
+      legendItemY <- 640000
+      create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, box.factor = 2, cex=0.8, y.intersp=1.5, 
+                 legend=naLabel, text.width = naLabelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+                 family = family, text.font = 1)
+    }else if(startsWith(maptype,"graduated")){
+      classes <- unique(sp$CLASS)
+      classes <- classes[order(classes)]
+      legend(legendX, legendY, cex = 0.8, col = col, pch = 19, pt.cex=classes, x.intersp=2, y.intersp=2, 
+             legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+             text.font = 1)
+    }
+    
+    #legend title
+    text(legendX+300000, -3750000, legendtitle, adj = c(0,0), font=2, cex=.8, col=legendcol, family = family)
+  }
 
+  showtext::showtext_auto(FALSE)
+  
 }

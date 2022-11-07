@@ -115,7 +115,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
   
   #other maptypes to be displayed after UN boundaries
   if(startsWith(maptype, "graduated")){
-    plot(sf::st_centroid(sf), lty=0, bg=col, col = "white", pch = 21, cex = sf$CLASS, add = TRUE)
+    plot(sf::st_centroid(sf), lty=0, bg=col, col = col, pch = 21, cex = sf$CLASS, add = TRUE)
   }
   
   if(!is.null(classints)){
@@ -143,7 +143,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                  legend=naLabel, text.width = naLabelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                  family = family, text.font = 1)
     }else if(startsWith(maptype,"graduated")){
-      classes <- unique(sp$CLASS)
+      classes <- unique(sf$CLASS)
       classes <- classes[order(classes)]
       legend(legendX, legendY, cex = 0.8, col = col, pch = 19, pt.cex=classes, x.intersp=2, y.intersp=2, 
              legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,

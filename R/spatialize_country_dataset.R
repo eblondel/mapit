@@ -22,7 +22,7 @@ spatialize_country_dataset <- function(stats, by, variable, maptype = "choroplet
   if(regexpr("symbols", maptype)>0){
     for(country in countries){
       dat = newdata[!is.na(newdata$M49) & newdata$M49 == country,]
-      idx <- dat[dat$surface == max(dat$surface), "rowid"]
+      idx <- dat[dat$surface == max(dat$surface), ][["rowid"]]
       idx = idx[1]
       if(nrow(newdata[!is.na(newdata$M49) & newdata$rowid != idx & newdata$M49 == country,])>0){
         newdata[!is.na(newdata$M49) & newdata$rowid != idx & newdata$M49 == country,][[variable]] <- NA
@@ -34,13 +34,13 @@ spatialize_country_dataset <- function(stats, by, variable, maptype = "choroplet
   
   #provinces of China
   #Aksai Chin
-  sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Aksai Chin",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
-  sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Taiwan",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
-  sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Hong Kong",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
-  sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Macao",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
+  if(any(!is.na(sf$ROMNAM) & sf$ROMNAM == "Aksai Chin")) sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Aksai Chin",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
+  if(any(!is.na(sf$ROMNAM) & sf$ROMNAM == "Taiwan")) sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Taiwan",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
+  if(any(!is.na(sf$ROMNAM) & sf$ROMNAM == "Hong Kong")) sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Hong Kong",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
+  if(any(!is.na(sf$ROMNAM) & sf$ROMNAM == "Macao")) sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Macao",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]
   
   #Arunachal Pradesh
-  sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Arunachal Pradesh",][[variable]] <- newdata[newdata$M49 == "356" & newdata$ISO3CD == "IND",][[variable]]
+  if(any(!is.na(sf$ROMNAM) & sf$ROMNAM == "Arunachal Pradesh")) sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Arunachal Pradesh",][[variable]] <- newdata[newdata$M49 == "356" & newdata$ISO3CD == "IND",][[variable]]
   
   return(sf)
 }

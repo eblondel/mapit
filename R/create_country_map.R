@@ -10,7 +10,8 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                                bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                                m49_codes_to_hide = "010",
                                add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                               legendtitle = "Legend", legendunit = "", legendcol = "black", 
+                               pch = 21,
+                               legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", 
                                add_disclaimers = TRUE,
                                add_copyright = TRUE,
                                add = FALSE,
@@ -115,10 +116,10 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
   
   #other maptypes to be displayed after UN boundaries
   if(startsWith(maptype, "graduated")){
-    plot(sf::st_centroid(sf), lty=0, bg=col, col = col, pch = 21, cex = sf$CLASS, add = TRUE)
+    plot(sf::st_centroid(sf), lty=0, bg=col, col = col, pch = pch, cex = sf$CLASS, add = TRUE)
   }
   
-  if(!is.null(classints)){
+  if(legend) if(!is.null(classints)){
     
     #legend for classes
     classLeg = classints

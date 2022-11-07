@@ -11,7 +11,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                                m49_codes_to_hide = "010",
                                add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                                pch = 21,
-                               legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", 
+                               legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
                                add_disclaimers = TRUE,
                                add_copyright = TRUE,
                                add = FALSE,
@@ -146,7 +146,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
     }else if(startsWith(maptype,"graduated")){
       classes <- unique(sf$CLASS)
       classes <- classes[order(classes)]
-      legend(legendX, legendY, cex = 0.8, col = col, pch = 19, pt.cex=classes, x.intersp=2, y.intersp=2, 
+      legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes, x.intersp=2, y.intersp=2, 
              legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
              text.font = 1)
     }

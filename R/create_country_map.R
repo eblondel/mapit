@@ -10,7 +10,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                                bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                                m49_codes_to_hide = "010",
                                add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                               pch = 21,
+                               pch = 21, scale_factor = 1.5,
                                legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
                                add_disclaimers = TRUE,
                                add_copyright = TRUE,
@@ -67,7 +67,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
     }
     
     #enrich with class
-    sf <- enrich_with_classes(sf, classints, variable, maptype)
+    sf <- enrich_with_classes(sf, classints, variable, maptype, scale_factor = scale_factor)
     
   } else if (classtype == "fixed"){
     if (missing(breaks)){

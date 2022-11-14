@@ -17,7 +17,7 @@ draw_map_arrow <- function(from, to, value, trunc = 15, col = "#0088A2"){
   linesf <- sf::st_transform(linesf, "+proj=eck4")
   coords = sf::st_coordinates(linesf)
 
-  plot(linesf, add = TRUE, lwd = 10, col = col)
+  plot(linesf, add = TRUE, lwd = value, col = col)
   shape::Arrows(coords[nrow(coords)-1,1], coords[nrow(coords)-1,2], coords[nrow(coords),1], coords[nrow(coords),2], arr.length = 0.6, code = 2, 
                 arr.type = "triangle", arr.col = col, lcol = col, xpd = TRUE, arr.width = 0.4)
 }

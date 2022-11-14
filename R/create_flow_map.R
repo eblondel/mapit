@@ -11,6 +11,9 @@ create_flow_map <- function(sf, by, data, data.col.from, data.col.to,
   
   if(!is(data,"data.frame")) stop("Data should of class 'data.frame'")
 
+  max.cex <- 10
+  cex.ratio <- max.cex / max(data$value)
+  
   for(i in 1:nrow(data)){
     
     if(data[i,][,data.col.from] == data[i,][,data.col.to]){
@@ -20,10 +23,11 @@ create_flow_map <- function(sf, by, data, data.col.from, data.col.to,
     
     sf.from <- sf::st_centroid(sf[sf[[by]] == data[i,][,data.col.from],])
     sf.to <- sf::st_centroid(sf[sf[[by]] == data[i,][,data.col.to],])
+    sf.to.pt <- sf::st_point_on_surface(sf[sf[[by]] == data[i,][,data.col.to],])
     draw_map_arrow(
       from = sf.from,
       to = sf.to,
-      value =data[i,]$value,
+      value = data[i,]$value * cex.ratio,
       trunc = arrow.trunc,
       col = arrow.col
     )
@@ -35,11 +39,11 @@ create_flow_map <- function(sf, by, data, data.col.from, data.col.to,
   for(i in 1:nrow(data)){
     if(data[i,][,data.col.from] == data[i,][,data.col.to]){
       sf.to <- sf::st_centroid(sf[sf[[by]] == data[i,][,data.col.to],])
-      plot(sf.to, pch = "\u21BA", font = 2, col = "white", cex = 5, add = TRUE)
+      plot(sf.to.pt, pch = "\u21BA", font = 2, col = "white", cex = 4, add = TRUE)
       
       sf.to.coords <- sf::st_coordinates(sf.to)
       mapit::create_legend(sf.to.coords[1], sf.to.coords[2], paste0(data[i,]$value*100,"%"), text.col = "white", text.font = 2, 
-                           box.col = label.box.col, bg = label.bg, xjust = 0.5, yjust = 0, x.intersp = 0)
+                           box.col = label.box.col, bg = label.bg, xjust = 0.5, yjust = 1, x.intersp = 0)
     }
   }
 }

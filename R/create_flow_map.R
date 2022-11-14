@@ -27,7 +27,7 @@ create_flow_map <- function(sf, by, data, data.col.from, data.col.to,
     draw_map_arrow(
       from = sf.from,
       to = sf.to,
-      value = data[i,]$value * cex.ratio,
+      value = ceiling(data[i,]$value * cex.ratio),
       trunc = arrow.trunc,
       col = arrow.col
     )

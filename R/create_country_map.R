@@ -10,7 +10,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
                                bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                                m49_codes_to_hide = "010",
                                add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                               pch = 21, scale_factor = 1.5,
+                               pch = 21, scale_factor = 1.5, plot.handler = NULL,
                                legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
                                add_disclaimers = TRUE,
                                add_copyright = TRUE,
@@ -116,7 +116,18 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
   
   #other maptypes to be displayed after UN boundaries
   if(startsWith(maptype, "graduated")){
-    plot(sf::st_centroid(sf), lty=0, bg=col, col = col, pch = pch, cex = sf$CLASS, add = TRUE)
+    sf_points <- sf::st_point_on_surface(sf)
+    if(!is.null(plot.handler)){
+      #with embedded plot
+      for(i in 1:nrow(sf_points)){
+        sf_plot_obj <- sf_points[i,]
+        sf_plot_obj_coords <- as.numeric(sf::st_coordinates(sf_plot_obj))
+        Hmisc::subplot(plot.handler(sf_plot_obj, cex = sf$CLASS), x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
+      }
+    }else{
+      #with simple symbols
+      plot(sf_points, lty=0, bg=col, col = col, pch = pch, cex = sf$CLASS, add = TRUE) 
+    }
   }
   
   if(legend) if(!is.null(classints)){

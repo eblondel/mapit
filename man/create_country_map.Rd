@@ -28,13 +28,19 @@ create_country_map(
   add_small_features_as_dots = TRUE,
   add_small_NA_features_as_dots = FALSE,
   small_features_dots_cex = 0.4,
+  pch = 21,
+  scale_factor = 1.5,
+  plot.handler = NULL,
+  legend = TRUE,
   legendtitle = "Legend",
   legendunit = "",
   legendcol = "black",
+  legendpch = pch,
+  legendpchcol = col,
   add_disclaimers = TRUE,
   add_copyright = TRUE,
   add = FALSE,
-  family = ""
+  family = "FuturaStd"
 )
 }
 \description{

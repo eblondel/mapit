@@ -1,3 +1,9 @@
+#' @name create_legend
+#' @aliases create_legend
+#' @title create_legend
+#' @export
+#' @description Creates a map legend
+#'
 create_legend <- function (x, y = NULL, legend, fill = NULL, col = par("col"), 
                    border = "black", lty, lwd, pch, angle = 45, density = NULL, 
                    bty = "o", bg = par("bg"), box.lwd = par("lwd"), 

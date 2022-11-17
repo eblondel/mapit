@@ -4,7 +4,20 @@
 \alias{create_flow_map}
 \title{create_flow_map}
 \usage{
-create_flow_map(sf, by, data, data.col.from, data.col.to)
+create_flow_map(
+  sf,
+  by,
+  data,
+  data.col.from,
+  data.col.to,
+  arrow.trunc = 20,
+  arrow.col = "#C3E4E5",
+  target.highlight = TRUE,
+  target.col = "#0088A2",
+  labels = TRUE,
+  label.box.col = "#0088A2",
+  label.bg = "#C3E4E5"
+)
 }
 \description{
 Creates a flow map

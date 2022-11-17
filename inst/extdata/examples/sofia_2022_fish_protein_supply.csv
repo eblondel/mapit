@@ -1,0 +1,228 @@
+M49,COUNTRY,FISH_PROT1,FISH_PROT2
+004,Afghanistan,0.0990024391,No
+008,Albania,2.551142,No
+012,Algeria,1.3235683306,No
+016,American Samoa,1.7136315756,Yes
+024,Angola,3.9639328266,Yes
+028,Antigua and Barbuda,15.2935930885,Yes
+031,Azerbaijan,0.578440078,No
+032,Argentina,1.8669944171,No
+036,Australia,6.1053675254,No
+040,Austria,3.9868478579,No
+044,Bahamas,6.5521203826,No
+048,Bahrain,4.63267,No
+050,Bangladesh,7.504831,Yes
+051,Armenia,1.6567626476,No
+052,Barbados,13.9295667107,Yes
+056,Belgium,6.098144,No
+060,Bermuda,12.4949248971,Yes
+064,Bhutan,2.3190660001,No
+068,Bolivia (Plurinat.State),0.6989816878,No
+070,Bosnia and Herzegovina,1.7882033964,No
+072,Botswana,0.680199727,No
+076,Brazil,2.2293920006,No
+084,Belize,3.3669895011,No
+090,Solomon Islands,9.796323,Yes
+092,British Virgin Islands,8.4536939233,Yes
+096,Brunei Darussalam,11.3109720962,Yes
+100,Bulgaria,2.246944,No
+104,Myanmar,15.926154,Yes
+108,Burundi,0.7710976034,Yes
+112,Belarus,3.167773,No
+116,Cambodia,14.0470593016,Yes
+120,Cameroon,5.1903163424,Yes
+124,Canada,5.3925946129,No
+132,Cabo Verde,2.2847769382,No
+136,Cayman Islands,4.748690525,No
+140,Central African Republic,2.385343,No
+144,Sri Lanka,9.1361426299,Yes
+148,Chad,3.1029346149,No
+152,Chile,2.9504156332,No
+156,China,9.4456413626,Yes
+158,Taiwan Province of China,7.3909709373,No
+170,Colombia,2.086464,No
+174,Comoros,4.869401,Yes
+175,Mayotte,1.390123,No
+178,Congo,8.7727197662,Yes
+180,"Congo, Dem. Rep. of the",1.2966300845,Yes
+184,Cook Islands,17.369336,Yes
+188,Costa Rica,5.790603,No
+191,Croatia,5.739016,No
+192,Cuba,1.540274,No
+196,Cyprus,6.856117,No
+203,Czechia,2.6977,No
+204,Benin,4.750141,Yes
+208,Denmark,9.999512,No
+212,Dominica,8.554081,No
+214,Dominican Republic,2.381315,No
+218,Ecuador,2.403205,No
+222,El Salvador,2.196621,No
+226,Equatorial Guinea,4.046972,Yes
+231,Ethiopia,0.165577,No
+232,Eritrea,0.3067036875,No
+233,Estonia,3.728226,No
+234,Faroe Islands,23.200572,Yes
+238,Falkland Is.(Malvinas),12.163563,Yes
+242,Fiji,8.051173,Yes
+246,Finland,9.013519,No
+250,France,8.762451,No
+254,French Guiana,2.469597,Yes
+258,French Polynesia,13.7490776652,Yes
+262,Djibouti,1.3426364047,No
+266,Gabon,8.424928,Yes
+268,Georgia,2.615141,No
+270,Gambia,8.602899,Yes
+275,Palestine,0.710398,No
+276,Germany,4.304895,No
+288,Ghana,8.2317003319,Yes
+296,Kiribati,23.808603,Yes
+300,Greece,6.2365128203,No
+304,Greenland,20.052419,Yes
+308,Grenada,8.436036,No
+312,Guadeloupe,3.27498,Yes
+316,Guam,1.285619,No
+320,Guatemala,1.022844,No
+324,Guinea,3.146302,Yes
+328,Guyana,7.047459,No
+332,Haiti,1.6981217362,No
+340,Honduras,0.768169,No
+344,"China, Hong Kong SAR",15.8589916278,No
+348,Hungary,1.825633,No
+352,Iceland,29.995268,Yes
+356,India,2.3691958702,No
+360,Indonesia,14.0035950141,Yes
+364,Iran (Islamic Rep. of),3.645593296,No
+368,Iraq,0.843064616,No
+372,Ireland,6.9620050000000004,No
+376,Israel,6.574285,No
+380,Italy,8.2846454746,No
+384,Côte d'Ivoire,7.6099362644,Yes
+388,Jamaica,7.095259,No
+392,Japan,16.593076,Yes
+398,Kazakhstan,0.831964,No
+400,Jordan,1.450489,No
+404,Kenya,0.873869,No
+408,"Korea, Dem. People's Rep",2.931243,Yes
+410,"Korea, Republic of",15.9058425609,Yes
+414,Kuwait,4.27894,No
+417,Kyrgyzstan,0.337119,No
+418,Lao People's Dem. Rep.,7.545014,Yes
+422,Lebanon,2.293858,No
+426,Lesotho,0.555359,No
+428,Latvia,7.419011,No
+430,Liberia,1.310183,No
+434,Libya,4.139484,No
+440,Lithuania,9.580135,No
+442,Luxembourg,8.7660532327,No
+446,"China, Macao SAR",16.716607836,Yes
+450,Madagascar,1.696154,No
+454,Malawi,3.8360077239,Yes
+458,Malaysia,15.9614409945,Yes
+462,Maldives,29.554333,Yes
+466,Mali,2.254003,No
+470,Malta,10.173132,No
+474,Martinique,3.146376,Yes
+478,Mauritania,2.609989,No
+480,Mauritius,7.687054,No
+484,Mexico,4.2617201807,No
+492,Monaco,0.00735,No
+496,Mongolia,0.178478,No
+498,"Moldova, Republic of",3.244879,No
+499,Montenegro,3.8627488507,No
+500,Montserrat,10.875898,Yes
+504,Morocco,6.1362035233,Yes
+508,Mozambique,4.0870247038,Yes
+512,Oman,7.783184,No
+516,Namibia,3.871993,No
+520,Nauru,15.952238,Yes
+524,Nepal,0.932493,No
+528,Netherlands,4.7338634654,No
+531,Curaçao,8.7575302365,Yes
+533,Aruba,14.2598798838,Yes
+534,Sint Maarten,1.653924,No
+535,Bonaire/S.Eustatius/Saba,3.863832,No
+540,New Caledonia,6.472299,No
+548,Vanuatu,9.445621,Yes
+554,New Zealand,7.0319190379,No
+558,Nicaragua,1.627729,No
+562,Niger,0.608278,No
+566,Nigeria,2.6396966795,Yes
+570,Niue,8.152771,Yes
+578,Norway,14.768627,Yes
+580,Northern Mariana Is.,1.590689,No
+583,"Micronesia, Fed.States of",13.254239,Yes
+584,Marshall Islands,10.792797,Yes
+585,Palau,18.362687,Yes
+586,Pakistan,0.552561,No
+591,Panama,5.216425,No
+598,Papua New Guinea,4.8997345944,No
+600,Paraguay,1.248651,No
+604,Peru,7.9262896595,No
+608,Philippines,8.5756797579,Yes
+616,Poland,6.527549,No
+620,Portugal,18.0238086745,Yes
+624,Guinea-Bissau,0.363308,No
+626,Timor-Leste,2.253029,Yes
+630,Puerto Rico,0.076671,No
+634,Qatar,5.744995,No
+638,Réunion,0.8866,No
+642,Romania,2.230949,No
+643,Russian Federation,7.1484308525,No
+646,Rwanda,2.583654,Yes
+652,Saint Barthélemy,2.884217,No
+654,Saint Helena,18.071793,Yes
+659,Saint Kitts and Nevis,10.703434,Yes
+660,Anguilla,12.6002706743,Yes
+662,Saint Lucia,9.403794,No
+663,Saint-Martin,0.694673,No
+666,St. Pierre and Miquelon,18.352953,Yes
+670,Saint Vincent/Grenadines,5.879508,No
+678,Sao Tome and Principe,9.026112,Yes
+682,Saudi Arabia,2.8504780821,No
+686,Senegal,5.344847,Yes
+688,Serbia,1.864132,No
+690,Seychelles,18.409507,Yes
+694,Sierra Leone,7.2721388036,Yes
+702,Singapore,11.7934104987,Yes
+703,Slovakia,2.7786575177,No
+704,Viet Nam,11.2318205862,Yes
+705,Slovenia,3.6777826146,No
+706,Somalia,0.647407,No
+710,South Africa,1.7798198853,No
+716,Zimbabwe,1.047846,No
+724,Spain,12.5835092241,No
+728,South Sudan,0.8789873538,No
+729,Sudan,0.339298,No
+740,Suriname,4.826505,No
+748,Eswatini,1.143489,No
+752,Sweden,8.547722,No
+756,Switzerland,4.1854191464,No
+760,Syrian Arab Republic,0.474123,No
+762,Tajikistan,0.1121,No
+764,Thailand,10.143266,Yes
+768,Togo,3.400401,Yes
+772,Tokelau,22.261328,Yes
+776,Tonga,6.751865,Yes
+780,Trinidad and Tobago,6.872879,No
+784,United Arab Emirates,6.89574,No
+788,Tunisia,3.8805154239,No
+792,Turkey,1.4864630359,No
+795,Turkmenistan,0.874217,No
+796,Turks and Caicos Is.,12.118202,Yes
+798,Tuvalu,14.706329,Yes
+800,Uganda,4.4009898861,Yes
+804,Ukraine,3.643987841,No
+807,North Macedonia,1.589338,No
+818,Egypt,7.7832695876,Yes
+826,United Kingdom,5.962457,No
+834,"Tanzania, United Rep. of",2.302877,No
+840,United States of America,5.4977813984,No
+850,US Virgin Islands,0.962203,Yes
+854,Burkina Faso,2.7759414075,Yes
+858,Uruguay,2.648064,No
+860,Uzbekistan,0.823969,No
+862,"Venezuela, Boliv Rep of",2.933523,No
+876,Wallis and Futuna Is.,15.216531,Yes
+882,Samoa,12.875975,Yes
+887,Yemen,0.998925,No
+894,Zambia,3.557316,Yes

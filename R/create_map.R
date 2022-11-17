@@ -1,10 +1,10 @@
-#' @name create_country_map
-#' @aliases create_country_map
-#' @title create_country_map
+#' @name create_map
+#' @aliases create_map
+#' @title create_map
 #' @export
-#' @description Creates a country map
+#' @description Creates a map
 #'
-create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
+create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang = "en",
                                maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
                                col = "#08519C", pal = NULL, invertpal = FALSE,
                                bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
@@ -24,7 +24,12 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
   layers <- get_baselayers()
   
   #process and spatialize statistics
-  sf <- spatialize_country_dataset(stats = stats, by = by, variable = variable, maptype = maptype, m49_codes_to_hide = m49_codes_to_hide)
+  sfby.code <- switch(sfby,
+    "countries" = "M49",
+    "fao_areas" = "F_CODE",
+    "fao_areas_inland" = "F_AREA_INL"
+  )
+  sf <- spatialize_dataset(sfby = sfby, sfby.code = sfby.code, stats = stats, by = by, variable = variable, maptype = maptype, m49_codes_to_hide = m49_codes_to_hide)
   
   #background
   if(!add){
@@ -106,7 +111,7 @@ create_country_map <- function(stats, by, variable, digits = 2, lang = "en",
   }
   
   #add UN boundaries
-  if(!add){
+  if(sfby == "countries") if(!add){
     boundaries = layers$boundaries
     plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
     plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)

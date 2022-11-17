@@ -4,7 +4,7 @@
 \alias{get_baselayers}
 \title{get_baselayers}
 \usage{
-get_baselayers()
+get_baselayers(clear)
 }
 \value{
 an \code{list} of \pkg{sf} objects

@@ -1,7 +1,7 @@
 # test_choropleth_maps.R
 #=======================
 require(testthat)
-context("create_map")
+context("choropleth_maps")
 
 test_that("create map - choropleth 1",{
   

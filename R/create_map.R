@@ -10,7 +10,7 @@ create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang
                                bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                                m49_codes_to_hide = "010",
                                add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                               pch = 21, scale_factor = 1.5, plot.handler = NULL,
+                               pch = 21, scale_factor = 1, plot.handler = NULL,
                                legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
                                add_disclaimers = TRUE,
                                add_copyright = TRUE,
@@ -127,7 +127,11 @@ create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang
       for(i in 1:nrow(sf_points)){
         sf_plot_obj <- sf_points[i,]
         sf_plot_obj_coords <- as.numeric(sf::st_coordinates(sf_plot_obj))
-        Hmisc::subplot(plot.handler(sf_plot_obj, cex = sf$CLASS), x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
+        subplot.size <- c(
+          graphics::grconvertX(sf_plot_obj$CLASS, "chars", "inches"),
+          graphics::grconvertY(sf_plot_obj$CLASS, "chars", "inches")
+        )
+        Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size/2, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
       }
     }else{
       #with simple symbols

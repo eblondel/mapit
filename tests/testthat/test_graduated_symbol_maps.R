@@ -1,7 +1,7 @@
 # test_choropleth_maps.R
 #=======================
 require(testthat)
-context("create_map")
+context("graduated_symbol_maps")
 
 test_that("create map - graduated linear symbols",{
   
@@ -9,9 +9,9 @@ test_that("create map - graduated linear symbols",{
 
   pdf("test_map_graduated_symbols_linear.pdf", width = 15, height = 10)
   mapit::create_map(sfby = "countries", stat = df, by = "M49", variable = "VALUE", digits = 0,
-                    classtype = "fixed", maptype = "graduated_mean_symbols",
+                    classtype = "fixed", maptype = "graduated_linear_symbols",
                     breaks = c(0,5,10,20,30,50,max(df$VALUE)),
-                    boundCol = "grey", 
+                    boundCol = "grey", scale_factor = 1, 
                     legendtitle = "AVERAGE AQUATIC FOODS CONSUMPTION PER CAPITA\n(IN KG/YEAR)",
                     legendunit = ""
   )
@@ -27,7 +27,7 @@ test_that("create map - graduated mean symbols",{
   mapit::create_map(sfby = "countries", stat = df, by = "M49", variable = "VALUE", digits = 0,
                     classtype = "fixed", maptype = "graduated_mean_symbols",
                     breaks = c(0,5,10,20,30,50,max(df$VALUE)),
-                    boundCol = "grey", 
+                    boundCol = "grey", scale_factor = 1,
                     legendtitle = "AVERAGE AQUATIC FOODS CONSUMPTION PER CAPITA\n(IN KG/YEAR)",
                     legendunit = ""
   )

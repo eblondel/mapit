@@ -13,7 +13,7 @@ spatialize_dataset <- function(sfby = "countries", sfby.code = "M49", stats, by,
   layers <- get_baselayers()
   sf <- layers[[sfby]]
   sf$surface <- sf::st_area(sf, by_element = TRUE)
-  sf <- sf[!sf$M49 %in% m49_codes_to_hide,]
+  if(sfby == "countries") sf <- sf[!sf$M49 %in% m49_codes_to_hide,]
   newdata <- merge(sf, stats, by.x = sfby.code, by.y = by, all.x = TRUE, all.y = FALSE)
   newdata <- newdata[order(newdata$rowid),]
   sfcodes <- unique(newdata[[sfby.code]])

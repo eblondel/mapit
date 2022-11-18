@@ -16,7 +16,7 @@
 #' }
 #' 
 get_baselayers <- function(clear = FALSE){
-  
+  if(clear) .mapit.cache$layers <- NULL
   if(!is.null(.mapit.cache$layers)) return(.mapit.cache$layers)
   invisible(get_baselayer("continent", "fifao:UN_CONTINENT2_NOPOLE", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("countries", "fifao:country_bounds", "+proj=eck4", cache = TRUE))

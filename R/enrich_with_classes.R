@@ -8,7 +8,7 @@
 #' 
 #' @return an object from \pkg{sf}
 #' 
-enrich_with_classes <- function(sf, classints, variable, maptype, scale_factor = 1.5){
+enrich_with_classes <- function(sf, classints, variable, maptype, scale_factor = 1){
   outsf <- sf
   outsf$maptype <- maptype
   levels <- attr(classInt::classIntervals2shingle(classints),"levels")

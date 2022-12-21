@@ -1,0 +1,241 @@
+"country_code","country_name","prod"
+"004","Afghanistan",0.02
+"008","Albania",0.07625665
+"012","Algeria",0.81465074
+"016","Amer Samoa",0.00871198
+"020","Andorra",0
+"024","Angola",3.77345
+"028","Antigua Barb",0.03165
+"031","Azerbaijan",0.02089
+"032","Argentina",8.37589518
+"036","Australia",1.77705989
+"040","Austria",0.0035
+"044","Bahamas",0.07343425
+"048","Bahrain",0.14414
+"050","Bangladesh",19.19505
+"051","Armenia",0.00542
+"052","Barbados",0.01516609
+"056","Belgium",0.199538
+"060","Bermuda",0.0035848
+"064","Bhutan",0.00015
+"068","Bolivia",0.075
+"070","Bosnia Herzg",0.00305
+"072","Botswana",0.00033
+"076","Brazil",7.09390634
+"084","Belize",1.86899165
+"086","Br Ind Oc Tr",0
+"090","Solomon Is",0.40869666
+"092","Br Virgin Is",0.01122
+"096","Brunei Darsm",0.1309104
+"100","Bulgaria",0.06295807
+"104","Myanmar",18.53564
+"108","Burundi",0.19589
+"112","Belarus",0.00939054
+"116","Cambodia",5.3286
+"120","Cameroon",2.8163
+"124","Canada",7.29794314
+"132","Cabo Verde",0.19291979
+"136","Cayman Is",0.00125
+"140","Cent Afr Rep",0.29
+"144","Sri Lanka",3.86821799
+"148","Chad",1.07
+"152","Chile",17.73510114
+"156","China",132.26202999
+"158","China,Taiwan",6.06206833
+"170","Colombia",0.77314723
+"174","Comoros",0.20755441
+"175","Mayotte",0.01237384
+"178","Congo",0.70637352
+"180","Congo Dem R",2.1775
+"184","Cook Is",0.02654942
+"188","Costa Rica",0.17394892
+"191","Croatia",0.71596308
+"192","Cuba",0.201862
+"196","Cyprus",0.01265862
+"203","Czechia",0.03729
+"204","Benin",0.73965
+"208","Denmark",7.32889624
+"212","Dominica",0.00854
+"214","Dominican Rp",0.0988049
+"218","Ecuador",6.3519165
+"222","El Salvador",0.52988973
+"226","Eq Guinea",0.06042453
+"231","Ethiopia",0.60002
+"232","Eritrea",0.05565
+"233","Estonia",0.73942479
+"234","Faroe Is",6.462897
+"238","Falkland Is",0.65978
+"242","Fiji",0.42470123
+"246","Finland",1.41128
+"250","France",4.14022546
+"254","Fr Guiana",0.01756774
+"258","Fr Polynesia",0.12536129
+"260","Fr South Tr",0.0042
+"262","Djibouti",0.023225
+"266","Gabon",0.29
+"268","Georgia",2.3115
+"270","Gambia",0.50989752
+"275","Palestine",0.0339
+"276","Germany",2.12094652
+"288","Ghana",3.5636101
+"292","Gibraltar",1e-05
+"296","Kiribati",2.12750789
+"300","Greece",0.71476174
+"304","Greenland",2.59209
+"308","Grenada",0.01812575
+"312","Guadeloupe",0.02415068
+"316","Guam",0.00044342
+"320","Guatemala",0.11276372
+"324","Guinea",3.0957
+"328","Guyana",0.399869
+"332","Haiti",0.1635
+"340","Honduras",0.1581882
+"344","China,H.Kong",1.19428
+"348","Hungary",0.05406442
+"352","Iceland",10.19688756
+"356","India",55.04713089
+"360","Indonesia",69.25049682
+"364","Iran",8.01881467
+"368","Iraq",0.34770171
+"372","Ireland",1.79002065
+"376","Israel",0.02016
+"380","Italy",1.40571498
+"384","Côte dIvoire",1.03411375
+"388","Jamaica",0.1287492
+"392","Japan",31.51730189
+"398","Kazakhstan",0.458147
+"400","Jordan",0.00583945
+"404","Kenya",1.22852
+"408","Korea D P Rp",2.02
+"410","Korea Rep",13.67835443
+"414","Kuwait",0.03095
+"417","Kyrgyzstan",2e-04
+"418","Lao P.Dem.R.",0.70001
+"422","Lebanon",0.029
+"426","Lesotho",0.00057
+"428","Latvia",1.03484
+"430","Liberia",0.31628669
+"434","Libya",0.3162735
+"438","Liechtensten",0
+"440","Lithuania",0.91083415
+"442","Luxembourg",0
+"446","China, Macao",0.015
+"450","Madagascar",1.1036
+"454","Malawi",1.7111522
+"458","Malaysia",13.88924208
+"462","Maldives",1.4856486
+"466","Mali",1.1769
+"470","Malta",0.02103246
+"474","Martinique",0.01551148
+"478","Mauritania",6.78425
+"480","Mauritius",0.2598888
+"484","Mexico",15.00987348
+"492","Monaco",1e-05
+"496","Mongolia",0.00025
+"498","Moldova Rep",5e-04
+"499","Montenegro",0.00815453
+"500","Montserrat",0.00025
+"504","Morocco",13.75313999
+"508","Mozambique",3.999535
+"512","Oman",7.93418923
+"516","Namibia",3.29614908
+"520","Nauru",0.92388
+"524","Nepal",0.21
+"528","Netherlands",3.05087
+"531","Curaçao",0.2304982
+"533","Aruba",0.00155
+"534","Sint Maarten",0.00253
+"535","Bonaire/Eust",0.0025
+"540","NewCaledonia",0.03318896
+"548","Vanuatu",0.51526362
+"554","New Zealand",3.63877496
+"558","Nicaragua",0.49703
+"562","Niger",0.46000001
+"566","Nigeria",7.83101704
+"570","Niue",0.00034
+"574","Norfolk Is",0
+"578","Norway",24.50901366
+"580","N Marianas",0.00097391
+"583","Micronesia",1.93597869
+"584","Marshall Is",0.88202609
+"585","Palau",0.00776
+"586","Pakistan",4.92783001
+"591","Panama",1.87704908
+"598","Papua N Guin",2.17553
+"600","Paraguay",0.16975
+"604","Peru",56.26541739
+"608","Philippines",19.119407
+"612","Pitcairn",3e-05
+"616","Poland",2.06390296
+"620","Portugal",1.58772958
+"624","GuineaBissau",0.62392458
+"626","Timor-Leste",0.083
+"630","Puerto Rico",0.01579709
+"634","Qatar",0.150866
+"638","Réunion",0.02660319
+"642","Romania",0.0797288
+"643","Russian Fed",50.72094068
+"646","Rwanda",0.29979
+"652","StBarthélemy",0.001
+"654","St Helena",0.00509196
+"659","St Kitts Nev",0.0064654
+"660","Anguilla",0.00835
+"662","St Lucia",0.01423829
+"663","Saint-Martin",9e-04
+"666","St Pier Mq",0.0269283
+"670","St Vincent",0.02124197
+"674","San Marino",0
+"678","Sao Tome Prn",0.05617457
+"682","Saudi Arabia",0.61942546
+"686","Senegal",4.51748321
+"688","Serbia",0.01932
+"690","Seychelles",1.32415917
+"694","Sierra Leone",2.0063
+"702","Singapore",0.01417707
+"703","Slovakia",0.01736
+"704","Viet Nam",34.2188015
+"705","Slovenia",0.00310273
+"706","Somalia",0.3
+"710","South Africa",5.95855244
+"716","Zimbabwe",0.18738
+"724","Spain",8.01982893
+"728","South Sudan",0.3
+"729","Sudan",0.3766
+"740","Suriname",0.29772
+"744","Svalbard Is",0
+"748","Eswatini",6e-04
+"752","Sweden",1.7964286
+"756","Switzerland",0.0148592
+"760","Syria",0.03845
+"762","Tajikistan",0.0194936
+"764","Thailand",16.5537966
+"768","Togo",0.18034
+"772","Tokelau",7e-04
+"776","Tonga",0.01096189
+"780","Trinidad Tob",0.12912669
+"784","Untd Arab Em",0.66481
+"788","Tunisia",1.03243235
+"792","Türkiye",3.64410882
+"795","Turkmenistan",0.14605
+"796","Turks Caicos",0.01297
+"798","Tuvalu",0.11294
+"800","Uganda",5.662612
+"804","Ukraine",0.68644942
+"807","NorthMacedon",0.00472875
+"818","Egypt",4.18683
+"826","UK",6.26043414
+"830","Channel Is",0.02073375
+"833","Isle of Man",0.0274295
+"834","Tanzania",4.6837175
+"836","Zanzibar",0.38105
+"840","USA",42.46059
+"850","US Virgin Is",0.0033
+"854","Burkina Faso",0.29104
+"858","Uruguay",0.6287987
+"860","Uzbekistan",0.46099999
+"862","Venezuela",2.5842373
+"876","Wallis Fut I",0.002638
+"882","Samoa",0.09946616
+"887","Yemen",1.31306513
+"894","Zambia",1.06836
+"896","Other nei",0.01030138

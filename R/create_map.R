@@ -150,7 +150,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     #TODO legend coordinates elements are +eck4 oriented... need to provided generic solution
     #legend for classes
     classLeg = classints
-    if(!missing(digits)){
+    print("Data distribution")
+    if(classtype == "fixed") if(!missing(digits)){
       classLeg$brks<-round(classLeg$brks,digits)
     } 
     x<-print(classLeg,cutlabels=F,over=">",under="<")

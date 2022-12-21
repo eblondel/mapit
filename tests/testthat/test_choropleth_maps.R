@@ -37,3 +37,29 @@ test_that("create map - choropleth 2",{
   
   dev.off()
 })
+
+test_that("create map - choropleth - FAO global production",{
+  
+  df <- as.data.frame(readr::read_csv(system.file("extdata/examples/fao_global_production.csv", package = "mapit")))
+  
+  #jenks
+  pdf("test_map_choropleth_fao_global_production_jenks.pdf", width = 15, height = 10)
+  mapit::create_map(sfby = "countries", stat = df, by = "country_code", variable = "prod", digits = 2,
+                    classtype = "jenks", classnumber = 5, pal = RColorBrewer::brewer.pal(5, "Blues"),
+                    boundCol = "grey", 
+                    legendtitle = "GLOBAL PRODUCTION",
+                    legendunit = ""
+  )
+  dev.off()
+  
+  #fixed
+  pdf("test_map_choropleth_fao_global_production_jenks.pdf", width = 15, height = 10)
+  mapit::create_map(sfby = "countries", stat = df, by = "country_code", variable = "prod", digits = 2,
+                    classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
+                    breaks = c(0,3,10,30,70,max(df$prod)),
+                    boundCol = "grey", 
+                    legendtitle = "GLOBAL PRODUCTION",
+                    legendunit = ""
+  )
+  dev.off()
+})

@@ -4,16 +4,20 @@
 #' @export
 #' @description Spatializes a statistical dataset
 #'
-#' @usage spatialize_dataset(sfby, sfby.code, stats, by, variable, maptype, m49_codes_to_hide)
+#' @usage spatialize_dataset(sf, sfby, sfby.code, stats, by, variable, maptype, m49_codes_to_hide)
 #' 
 #' @return an object from \pkg{sf}
 #' 
-spatialize_dataset <- function(sfby = "countries", sfby.code = "M49", stats, by, variable, maptype = "choropleth", m49_codes_to_hide = "010"){
+spatialize_dataset <- function(sf = NULL, sfby = NULL, sfby.code = NULL, stats, by, variable, maptype = "choropleth", m49_codes_to_hide = "010"){
+  
+  if(is.null(sfby.code)) stop("Argument 'sfby.code' is required!")
   
   layers <- get_baselayers()
-  sf <- layers[[sfby]]
+  if(!is.null(sfby)){
+    sf <- layers[[sfby]]
+    if(sfby == "countries") sf <- sf[!sf$M49 %in% m49_codes_to_hide,]
+  }
   sf$surface <- sf::st_area(sf, by_element = TRUE)
-  if(sfby == "countries") sf <- sf[!sf$M49 %in% m49_codes_to_hide,]
   newdata <- merge(sf, stats, by.x = sfby.code, by.y = by, all.x = TRUE, all.y = FALSE)
   newdata <- newdata[order(newdata$rowid),]
   sfcodes <- unique(newdata[[sfby.code]])
@@ -33,7 +37,7 @@ spatialize_dataset <- function(sfby = "countries", sfby.code = "M49", stats, by,
   if(regexpr("symbols", maptype)>0) sf <- sf[!is.na(sf[[variable]]),]
   
   #Specific country cases
-  if(sfby == "countries"){
+  if(!is.null(sfby)) if(sfby == "countries"){
     #provinces of China
     #Aksai Chin
     if(any(!is.na(sf$ROMNAM) & sf$ROMNAM == "Aksai Chin")) sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Aksai Chin",][[variable]] <- newdata[newdata$M49 == "156" & newdata$ISO3CD == "CHN",][[variable]]

@@ -4,18 +4,19 @@
 #' @export
 #' @description Creates a map
 #'
-create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang = "en",
-                               maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
-                               col = "#08519C", pal = NULL, invertpal = FALSE,
-                               bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
-                               m49_codes_to_hide = "010",
-                               add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                               pch = 21, scale_factor = 1, plot.handler = NULL,
-                               legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
-                               add_disclaimers = TRUE,
-                               add_copyright = TRUE,
-                               add = FALSE,
-                               family = "FuturaStd"){
+create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
+                       stats = NULL, by = NULL, variable, digits = 2, lang = "en",
+                       maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
+                       col = "#08519C", pal = NULL, invertpal = FALSE,
+                       bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
+                       m49_codes_to_hide = "010",
+                       add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
+                       pch = 21, scale_factor = 1, plot.handler = NULL,
+                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
+                       add_disclaimers = TRUE,
+                       add_copyright = TRUE,
+                       add = FALSE,
+                       family = "FuturaStd"){
   
   showtext::showtext_auto()
   par(family =  "Arial Unicode MS")
@@ -24,12 +25,18 @@ create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang
   layers <- get_baselayers()
   
   #process and spatialize statistics
-  sfby.code <- switch(sfby,
+  if(!is.null(sfby)) sfby.code <- switch(sfby,
     "countries" = "M49",
     "fao_areas" = "F_CODE",
-    "fao_areas_inland" = "F_AREA_INL"
+    "fao_areas_inland" = "F_AREA_INL",
+    NULL
   )
-  sf <- spatialize_dataset(sfby = sfby, sfby.code = sfby.code, stats = stats, by = by, variable = variable, maptype = maptype, m49_codes_to_hide = m49_codes_to_hide)
+  sf <- spatialize_dataset(
+    sf = sf, sfby = sfby, sfby.code = sfby.code, 
+    stats = stats, by = by, variable = variable, 
+    maptype = maptype, 
+    m49_codes_to_hide = m49_codes_to_hide
+  )
   
   #background
   if(!add){
@@ -111,7 +118,7 @@ create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang
   }
   
   #add UN boundaries
-  if(sfby == "countries") if(!add){
+  if(!is.null(sfby)) if(sfby == "countries") if(!add){
     boundaries = layers$boundaries
     plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
     plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
@@ -140,7 +147,7 @@ create_map <- function(sfby = "countries", stats, by, variable, digits = 2, lang
   }
   
   if(legend) if(!is.null(classints)){
-    
+    #TODO legend coordinates elements are +eck4 oriented... need to provided generic solution
     #legend for classes
     classLeg = classints
     if(!missing(digits)){

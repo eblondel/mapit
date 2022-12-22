@@ -23,7 +23,7 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("boundaries", "fifao:UN_intbnd", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_CWP", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
-  
+  invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
   return(.mapit.cache$layers)
 }
 

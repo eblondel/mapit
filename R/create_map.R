@@ -96,7 +96,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       }
       
       #enrich with class
-      sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.unit = level.uni)
+      sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.unit = level.unit)
     }                                                                        
   }    
   
@@ -128,6 +128,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   
   #other maptypes to be displayed after UN boundaries
   if(startsWith(maptype, "graduated")){
+    if(!is.null(sfby)) if(sfby == "fao_areas"){
+      fao_areas_lines <- layers$fao_areas_lines
+      plot(fao_areas_lines, lty = "42", bg=bgCol, col="blue", add = TRUE)
+    }
     sf_points <- sf::st_point_on_surface(sf)
     if(!is.null(plot.handler)){
       #with embedded plot

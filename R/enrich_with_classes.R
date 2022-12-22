@@ -4,23 +4,34 @@
 #' @export
 #' @description Enrichs a spatialized statistical dataset with classes
 #'
-#' @usage enrich_with_classes(sf, classints, variable, maptype, scale_factor)
+#' @usage enrich_with_classes(sf, classints, variable, maptype, level.min, level.max, level.unit)
 #' 
 #' @return an object from \pkg{sf}
 #' 
-enrich_with_classes <- function(sf, classints, variable, maptype, scale_factor = 1){
+enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NULL, level.max = NULL, level.unit = "chars"){
+
+  
   outsf <- sf
   outsf$maptype <- maptype
   levels <- attr(classInt::classIntervals2shingle(classints),"levels")
+  if(is.null(level.min)) level.min = 1
+  if(is.null(level.max)) level.max = length(levels)
+  
+  if(level.unit == "inches"){
+    level.min = graphics::grconvertX(level.min, "inches", "chars")
+    level.max = graphics::grconvertX(level.max, "inches", "chars")
+  }
+  
   switch(maptype,
          "graduated_linear_symbols" = {
+           level.seq = seq(level.min, level.max, by = (level.max-level.min)/(length(levels)-1))
            outsf$CLASS <- 0
            for(i in 1:length(levels)){
              lev <- levels[[i]]
              if(i==1){
-               outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- i / scale_factor
+               outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }else{
-               outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- i / scale_factor
+               outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }
            }
          },
@@ -31,15 +42,13 @@ enrich_with_classes <- function(sf, classints, variable, maptype, scale_factor =
              mid <- lev[1] + (lev[2] - lev[1])/2
              return(mid)
            })
-           mid_ratio <- max(mids)/length(levels)
+           level.seq <- level.min + (level.max-level.min) * (mids[1:length(levels)]-mids[1])/(mids[length(levels)]-mids[1])
            for(i in 1:length(mids)){
-             print(i)
              lev <- levels[[i]]
-             mid_class <- mids[i] / mid_ratio
              if(i==1){
-               outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- mid_class / scale_factor
+               outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }else{
-               outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- mid_class / scale_factor
+               outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }
            }
          }

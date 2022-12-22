@@ -11,7 +11,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                       pch = 21, scale_factor = 1, plot.handler = NULL,
+                       pch = 21, level.min = NULL, level.max = NULL, level.unit = "chars", plot.handler = NULL,
                        legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
@@ -79,7 +79,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     }
     
     #enrich with class
-    sf <- enrich_with_classes(sf, classints, variable, maptype, scale_factor = scale_factor)
+    sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.unit = level.unit)
     
   } else if (classtype == "fixed"){
     if (missing(breaks)){
@@ -96,7 +96,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       }
       
       #enrich with class
-      sf <- enrich_with_classes(sf, classints, variable, maptype)
+      sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.unit = level.uni)
     }                                                                        
   }    
   

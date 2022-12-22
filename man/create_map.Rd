@@ -5,9 +5,11 @@
 \title{create_map}
 \usage{
 create_map(
-  sfby = "countries",
-  stats,
-  by,
+  sf = NULL,
+  sfby = NULL,
+  sfby.code = NULL,
+  stats = NULL,
+  by = NULL,
   variable,
   digits = 2,
   lang = "en",
@@ -30,7 +32,9 @@ create_map(
   add_small_NA_features_as_dots = FALSE,
   small_features_dots_cex = 0.4,
   pch = 21,
-  scale_factor = 1.5,
+  level.min = NULL,
+  level.max = NULL,
+  level.unit = "chars",
   plot.handler = NULL,
   legend = TRUE,
   legendtitle = "Legend",

@@ -4,7 +4,7 @@
 \alias{spatialize_dataset}
 \title{spatialize_dataset}
 \usage{
-spatialize_dataset(sfby, sfby.code, stats, by, variable, maptype, m49_codes_to_hide)
+spatialize_dataset(sf, sfby, sfby.code, stats, by, variable, maptype, m49_codes_to_hide)
 }
 \value{
 an object from \pkg{sf}

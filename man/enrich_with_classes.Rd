@@ -4,7 +4,7 @@
 \alias{enrich_with_classes}
 \title{enrich_with_classes}
 \usage{
-enrich_with_classes(sf, classints, variable, maptype, scale_factor)
+enrich_with_classes(sf, classints, variable, maptype, level.min, level.max, level.unit)
 }
 \value{
 an object from \pkg{sf}

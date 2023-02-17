@@ -60,7 +60,11 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   }
   
   #base continent
-  if(!add) plot(layers$continent[1], col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
+  if(!add){
+    continent_layer <- "continent"
+    if(!is.null(sfby)) if(sfby == "countries") continent_layer = "continent_nopole"
+    plot(layers[[continent_layer]][1], col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
+  }
   
   #intervals
   # defining INTERVALS

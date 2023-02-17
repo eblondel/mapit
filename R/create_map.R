@@ -134,7 +134,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   if(startsWith(maptype, "graduated")){
     if(!is.null(sfby)) if(sfby == "fao_areas"){
       fao_areas_lines <- layers$fao_areas_lines
-      plot(fao_areas_lines, lty = "42", bg=bgCol, col="blue", add = TRUE)
+      plot(fao_areas_lines, bg=bgCol, col="blue", add = TRUE)
     }
     sf_points <- sf::st_point_on_surface(sf)
     if(!is.null(plot.handler)){

@@ -14,7 +14,8 @@ test_that("create map - with histogram",{
                       hist(rnorm(100), breaks = 20, col = "blue", main = NULL, axes = FALSE, xlab = "", ylab = "", border = "blue")
                     },
                     breaks = c(0,5,10,20,30,50,max(df$VALUE)),
-                    boundCol = "grey", 
+                    boundCol = "grey",
+                    legend_nesting = TRUE,
                     legendtitle = "BREAKDOWN BY COUNTRY",
                     legendunit = ""
   )

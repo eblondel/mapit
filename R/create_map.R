@@ -12,7 +12,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                        pch = 21, level.min = NULL, level.max = NULL, level.unit = "chars", plot.handler = NULL,
-                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, 
+                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, legend_nesting = FALSE, 
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
                        add = FALSE,
@@ -180,11 +180,36 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                  legend=naLabel, text.width = naLabelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                  family = family, text.font = 1)
     }else if(startsWith(maptype,"graduated")){
+      
       classes <- unique(sf$CLASS)
       classes <- classes[order(classes)]
-      legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes, x.intersp=2, y.intersp=2, 
-             legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
-             text.font = 1)
+      
+      if(legend_nesting){
+        
+        classes = rev(classes)
+        
+        legendX = -16000000
+        legendY = -6000000
+        crc_x <- legendX
+        crc_y <- legendY
+        circle_bottom = NULL
+        max_radius = max(abs(abs(graphics::grconvertY(classes, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin)))
+        last_radius = NULL
+        for(i in 1:length(classes)){
+          class = classes[i]
+          radius = abs(graphics::grconvertY(class, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin)
+          if(i>1) crc_y = crc_y - (radius - last_radius) #for top to down invert (radius-last_radius)
+          crc <- plotrix::draw.circle(crc_x, crc_y, radius)
+          rect(crc_x, crc_y - radius, crc_x + max_radius*1.1, crc_y - radius, col = "black")
+          text(crc_x + max_radius*1.6, crc_y - radius, labels = label[i], cex = 0.8, col = "black")
+          if(i>1) circle_bottom = min(crc$y[which(crc$x == crc_x)])
+          last_radius = radius
+        }
+      }else{
+        legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes, x.intersp=2, y.intersp=2, 
+               legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+               text.font = 1)
+      }
     }
     
     #legend title

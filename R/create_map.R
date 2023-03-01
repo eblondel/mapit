@@ -193,11 +193,11 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         crc_x <- legendX
         crc_y <- legendY
         circle_bottom = NULL
-        max_radius = max(abs(abs(graphics::grconvertY(classes, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin)))
+        max_radius = max(abs(abs(graphics::grconvertY(classes, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin))/2)
         last_radius = NULL
         for(i in 1:length(classes)){
           class = classes[i]
-          radius = abs(graphics::grconvertY(class, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin)
+          radius = (abs(graphics::grconvertY(class, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin))/2
           if(i>1) crc_y = crc_y - (radius - last_radius) #for top to down invert (radius-last_radius)
           crc <- plotrix::draw.circle(crc_x, crc_y, radius)
           rect(crc_x, crc_y - radius, crc_x + max_radius*1.1, crc_y - radius, col = "black")

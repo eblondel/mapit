@@ -31,8 +31,8 @@ test_that("create map - with pie charts / real example",{
   
   pdf("test_map_graduated_symbols_mean_with_piechart_fao_areas.pdf", width = 15, height = 10)
   mapit::create_map(sfby = "fao_areas", stat = df, by = "f_code", variable = "catch", digits = 2,
-                    classtype = "jenks", classnumber = 4, maptype = "graduated_mean_symbols",
-                    level.min = 3, level.max = 15, level.unit = "chars",
+                    classtype = "fixed", maptype = "graduated_mean_symbols",
+                    breaks = c(0, 5, 10, 14, max(df$catch)),
                     plot.handler = function(x){
                       df.x <- as.data.frame(x)
                       df.x <- df.x[,c("demersal", "tuna", "other_pelagic", "other_aquatic")]
@@ -44,7 +44,8 @@ test_that("create map - with pie charts / real example",{
                     },
                     boundCol = "grey", 
                     legendtitle = "CATCH (MILLION TONNES)",
-                    legendunit = ""
+                    legendunit = "",
+                    legend_nesting = TRUE
   )
   dev.off()
   

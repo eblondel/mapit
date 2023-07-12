@@ -42,6 +42,7 @@ create_map(
   legendcol = "black",
   legendpch = pch,
   legendpchcol = col,
+  legend_nesting = FALSE,
   add_disclaimers = TRUE,
   add_copyright = TRUE,
   add = FALSE,

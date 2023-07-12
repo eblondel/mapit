@@ -39,6 +39,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   )
   
   #background
+  bg_layer = NULL
   if(!add){
     coords <- data.frame(matrix(c(-180,-90,-180,90,180,90,180,-90,-180,-90),ncol=2, byrow=TRUE))
     colnames(coords) <- c("X","Y")
@@ -56,6 +57,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     
     b_poly <- sf::st_sf(geom = sf::st_sfc(sf::st_polygon(list(newcoords))), crs = 4326)
     b_poly <- sf::st_transform(b_poly, "+proj=eck4")
+    bg_layer <- b_poly
     plot(b_poly[1], col = bgCol, border = bgBorderCol, reset = FALSE)
   }
   
@@ -187,23 +189,37 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       if(legend_nesting){
         
         classes = rev(classes)
+        print(classes)
+        label = rev(label)
+        print(label)
         
-        legendX = -16000000
+        legendX = -16500000
         legendY = -6000000
         crc_x <- legendX
         crc_y <- legendY
-        circle_bottom = NULL
-        max_radius = max(abs(abs(graphics::grconvertY(classes, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin))/2)
-        last_radius = NULL
+       
+        base_y = NULL
+        max_r_user = NULL
         for(i in 1:length(classes)){
           class = classes[i]
-          radius = (abs(graphics::grconvertY(class, "chars", "user"))/2-abs(sf::st_bbox(layers[[continent_layer]])$ymin))/2
-          if(i>1) crc_y = crc_y - (radius - last_radius) #for top to down invert (radius-last_radius)
-          crc <- plotrix::draw.circle(crc_x, crc_y, radius)
-          rect(crc_x, crc_y - radius, crc_x + max_radius*1.1, crc_y - radius, col = "black")
-          text(crc_x + max_radius*1.6, crc_y - radius, labels = label[i], cex = 0.8, col = "black")
-          if(i>1) circle_bottom = min(crc$y[which(crc$x == crc_x)])
-          last_radius = radius
+          
+          r_user = abs(graphics::grconvertY(class, "char", "user"))/2
+          if(i==1) max_r_user = r_user
+          if(i>1){
+            r_user = max_r_user * classes[i]/classes[1]
+            crc_y = base_y + r_user
+          }
+          
+          crc <- sf::st_sf(sf::st_sfc(sf::st_point(x = c(crc_x, crc_y))))
+          sf::st_crs(crc) <- sf::st_crs(bg_layer)
+          crc_buffer = sf::st_buffer(crc, dist = r_user)
+          if(i==1){
+            base_y = sf::st_bbox(crc_buffer)$ymin
+          }
+          plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = col, pch = pch, cex = class, add = TRUE)
+          top_y = sf::st_bbox(crc_buffer)$ymax
+          text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = 0.8, col = "black", adj = 0)
+          rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, col = "black")
         }
       }else{
         legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes, x.intersp=2, y.intersp=2, 
@@ -213,7 +229,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     }
     
     #legend title
-    text(legendX+300000, -3750000, legendtitle, adj = c(0,0), font=2, cex=.8, col=legendcol, family = family)
+    text(legendX+200000, -3750000, legendtitle, adj = c(0,0), font=2, cex=.8, col=legendcol, family = family)
   }
 
   showtext::showtext_auto(FALSE)

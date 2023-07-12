@@ -11,9 +11,9 @@ test_that("create map - graduated linear symbols",{
   mapit::create_map(sfby = "countries", stat = df, by = "M49", variable = "VALUE", digits = 0,
                     classtype = "fixed", maptype = "graduated_linear_symbols",
                     breaks = c(0,5,10,20,30,50,max(df$VALUE)),
-                    boundCol = "grey", scale_factor = 1, 
+                    boundCol = "grey",
                     legendtitle = "AVERAGE AQUATIC FOODS CONSUMPTION PER CAPITA\n(IN KG/YEAR)",
-                    legendunit = ""
+                    legendunit = "", legend_nesting = TRUE
   )
   dev.off()
   
@@ -27,9 +27,9 @@ test_that("create map - graduated mean symbols",{
   mapit::create_map(sfby = "countries", stat = df, by = "M49", variable = "VALUE", digits = 0,
                     classtype = "fixed", maptype = "graduated_mean_symbols",
                     breaks = c(0,5,10,20,30,50,max(df$VALUE)),
-                    boundCol = "grey", scale_factor = 1,
+                    boundCol = "grey",
                     legendtitle = "AVERAGE AQUATIC FOODS CONSUMPTION PER CAPITA\n(IN KG/YEAR)",
-                    legendunit = ""
+                    legendunit = "", legend_nesting = TRUE
   )
   dev.off()
   

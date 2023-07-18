@@ -203,7 +203,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         for(i in 1:length(classes)){
           class = classes[i]
           
-          r_user = abs(graphics::grconvertY(class, level.unit, "user"))/2
+          r_user = abs(graphics::grconvertY(class, "chars", "user"))/2
           if(i==1) max_r_user = r_user
           if(i>1){
             r_user = max_r_user * classes[i]/classes[1]
@@ -219,7 +219,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = legendpchcol, pch = pch, cex = class, add = TRUE)
           top_y = sf::st_bbox(crc_buffer)$ymax
           text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = 0.8, col = legendpchcol, adj = 0)
-          rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, col = legendpchcol)
+          rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, border = legendpchcol)
         }
       }else{
         legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes, x.intersp=2, y.intersp=2, 

@@ -216,10 +216,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           if(i==1){
             base_y = sf::st_bbox(crc_buffer)$ymin
           }
-          plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = col, pch = pch, cex = class, add = TRUE)
+          plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = legendpchcol, pch = pch, cex = class, add = TRUE)
           top_y = sf::st_bbox(crc_buffer)$ymax
-          text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = 0.8, col = "black", adj = 0)
-          rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, col = "black")
+          text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = 0.8, col = legendpchcol, adj = 0)
+          rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, col = legendpchcol)
         }
       }else{
         legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes, x.intersp=2, y.intersp=2, 

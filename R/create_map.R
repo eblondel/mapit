@@ -154,13 +154,13 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         )
         Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
       }
-      if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
-        sf::st_buffer(sf_points[i,], dist = (abs(par("usr")[3]) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2)
-      })), lty=1, bg="transparent", col = "transparent", border = "red", add = TRUE)
     }else{
       #with simple symbols
-      plot(sf_points, lty=0, bg=col, col = col, pch = pch, cex = sf$CLASS*1.2, add = TRUE) 
+      plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.4, add = TRUE) 
     }
+    if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
+      sf::st_buffer(sf_points[i,], dist = (abs(par("usr")[3]) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2)
+    })), lty=1, bg="transparent", col = "transparent", border = "red", add = TRUE)
   }
   
   if(legend) if(!is.null(classints)){

@@ -203,7 +203,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         for(i in 1:length(classes)){
           class = classes[i]
           
-          r_user = abs(graphics::grconvertY(class, "char", "user"))/2
+          r_user = abs(graphics::grconvertY(class, level.unit, "user"))/2
           if(i==1) max_r_user = r_user
           if(i>1){
             r_user = max_r_user * classes[i]/classes[1]

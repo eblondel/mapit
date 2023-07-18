@@ -11,11 +11,12 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                       pch = 21, level.min = NULL, level.max = NULL, level.unit = "chars", plot.handler = NULL,
-                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendpchcol = col, legend_nesting = FALSE, 
+                       pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", plot.handler = NULL,
+                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = col, legend_nesting = FALSE, 
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
                        add = FALSE,
+                       debug = FALSE,
                        family = "FuturaStd"){
   
   showtext::showtext_auto()
@@ -85,7 +86,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     }
     
     #enrich with class
-    sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.unit = level.unit)
+    sf <- enrich_with_classes(sf, classints, variable, maptype, 
+                              level.min = level.min, level.max = level.max, 
+                              level.factor = level.factor,
+                              level.unit = level.unit)
     
   } else if (classtype == "fixed"){
     if (missing(breaks)){
@@ -102,7 +106,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       }
       
       #enrich with class
-      sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.unit = level.unit)
+      sf <- enrich_with_classes(sf, classints, variable, maptype, level.min = level.min, level.max = level.max, level.factor = level.factor, level.unit = level.unit)
     }                                                                        
   }    
   
@@ -148,11 +152,14 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           graphics::grconvertX(sf_plot_obj$CLASS, "chars", "inches"),
           graphics::grconvertY(sf_plot_obj$CLASS, "chars", "inches")
         )
-        Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size/2, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
+        Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
       }
+      if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
+        sf::st_buffer(sf_points[i,], dist = (abs(par("usr")[3]) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2)
+      })), lty=1, bg="transparent", col = "transparent", border = "red", add = TRUE)
     }else{
       #with simple symbols
-      plot(sf_points, lty=0, bg=col, col = col, pch = pch, cex = sf$CLASS, add = TRUE) 
+      plot(sf_points, lty=0, bg=col, col = col, pch = pch, cex = sf$CLASS*1.2, add = TRUE) 
     }
   }
   
@@ -203,7 +210,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         for(i in 1:length(classes)){
           class = classes[i]
           
-          r_user = abs(graphics::grconvertY(class, "chars", "user"))/2
+          r_user = (abs(par("usr")[3]) - abs(graphics::grconvertY(class, "chars", "user")))/2
           if(i==1) max_r_user = r_user
           if(i>1){
             r_user = max_r_user * classes[i]/classes[1]
@@ -216,9 +223,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           if(i==1){
             base_y = sf::st_bbox(crc_buffer)$ymin
           }
-          plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = legendpchcol, pch = pch, cex = class, add = TRUE)
+          #plot(crc, lty = 1, bg = "transparent", col = legendpchcol, pch = pch, cex = class*1.2, add = TRUE)
+          plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = legendpchcol, add = TRUE)
           top_y = sf::st_bbox(crc_buffer)$ymax
-          text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = 0.8, col = legendpchcol, adj = 0)
+          text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = legendcex, col = legendpchcol, adj = 0)
           rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, border = legendpchcol)
         }
       }else{

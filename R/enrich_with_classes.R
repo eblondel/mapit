@@ -8,7 +8,7 @@
 #' 
 #' @return an object from \pkg{sf}
 #' 
-enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NULL, level.max = NULL, level.unit = "chars"){
+enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars"){
 
   
   outsf <- sf
@@ -53,5 +53,8 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
            }
          }
   )
+  outsf$CLASS = outsf$CLASS * level.factor
+  classes = unique(outsf$CLASS)
+  classes = classes[order(classes)]
   return(outsf)
 }

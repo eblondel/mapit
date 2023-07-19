@@ -19,6 +19,9 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        debug = FALSE,
                        family = "FuturaStd"){
   
+  #get current factor of compression for the plot region (depending on the margin)
+  margin_comp_factor = par("plt")[4]-par("plt")[3]
+  
   showtext::showtext_auto()
   par(family =  "Arial Unicode MS")
   
@@ -156,10 +159,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       }
     }else{
       #with simple symbols
-      plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.4, add = TRUE) 
+      plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
     }
     if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
-      sf::st_buffer(sf_points[i,], dist = (abs(par("usr")[3]) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2)
+      sf::st_buffer(sf_points[i,], dist = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2)
     })), lty=1, bg="transparent", col = "transparent", border = "red", add = TRUE)
   }
   
@@ -210,7 +213,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         for(i in 1:length(classes)){
           class = classes[i]
           
-          r_user = (abs(par("usr")[3]) - abs(graphics::grconvertY(class, "chars", "user")))/2
+          r_user = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(class, "chars", "user")))/2
           if(i==1) max_r_user = r_user
           if(i>1){
             r_user = max_r_user * classes[i]/classes[1]
@@ -230,7 +233,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, border = legendpchcol)
         }
       }else{
-        legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes*2.4, x.intersp=2, y.intersp=2, 
+        legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes*2.6, x.intersp=2, y.intersp=2, 
                legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                text.font = 1)
       }

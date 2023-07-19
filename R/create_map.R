@@ -7,7 +7,7 @@
 create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
-                       col = "#08519C", pal = NULL, invertpal = FALSE,
+                       col = "black", pal = NULL, invertpal = FALSE,
                        bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,

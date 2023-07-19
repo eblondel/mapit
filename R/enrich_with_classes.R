@@ -53,8 +53,8 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
            }
          }
   )
-  outsf$CLASS = outsf$CLASS * level.factor
-  classes = unique(outsf$CLASS)
-  classes = classes[order(classes)]
+  if("CLASS" %in% colnames(outsf)){
+    outsf$CLASS = outsf$CLASS * level.factor
+  }
   return(outsf)
 }

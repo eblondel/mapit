@@ -13,6 +13,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                        pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", plot.handler = NULL,
                        legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = col, legend_nesting = FALSE, 
+                       halo = FALSE, halocol = "black", halolwd = 1,
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
                        add = FALSE,
@@ -146,6 +147,9 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       plot(fao_areas_lines, bg=bgCol, col="blue", add = TRUE)
     }
     sf_points <- sf::st_point_on_surface(sf)
+    if(halo){
+      plot(sf_points, lwd=halolwd, bg="transparent", col = halocol, pch = 21, cex = sf$CLASS*2.5, add = TRUE)
+    }
     if(!is.null(plot.handler)){
       #with embedded plot
       for(i in 1:nrow(sf_points)){
@@ -155,15 +159,18 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           graphics::grconvertX(sf_plot_obj$CLASS, "chars", "inches"),
           graphics::grconvertY(sf_plot_obj$CLASS, "chars", "inches")
         )
-        Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2])
+        Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2], 
+                       pars = list(mar = rep(0.1,4)))
       }
     }else{
       #with simple symbols
       plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
     }
+    
     if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
       sf::st_buffer(sf_points[i,], dist = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2)
     })), lty=1, bg="transparent", col = "transparent", border = "red", add = TRUE)
+    
   }
   
   if(legend) if(!is.null(classints)){

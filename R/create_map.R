@@ -14,6 +14,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", plot.handler = NULL,
                        legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = col, legend_nesting = FALSE, 
                        halo = FALSE, halocol = "black", halolwd = 1,
+                       naLabel = "No Data",
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
                        add = FALSE,
@@ -192,7 +193,6 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                     box.factor = 2,
                     family = family, text.font = 1)
       #legend for 'no data'
-      naLabel = "No Data"
       naLabelLength = nchar(naLabel)
       legendItemY <- 640000
       create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, box.factor = 2, cex=0.8, y.intersp=1.5, 

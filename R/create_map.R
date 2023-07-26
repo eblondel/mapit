@@ -8,13 +8,13 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
                        col = "black", pal = NULL, invertpal = FALSE,
-                       bgCol = "transparent", bgBorderCol = "transparent", naCol = "gray",naColBox= "lightgray", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
+                       bgCol = "transparent", bgBorderCol = "transparent", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                        pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", plot.handler = NULL,
                        legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = col, legend_nesting = FALSE, 
                        halo = FALSE, halocol = "black", halolwd = 1,
-                       naLabel = "No Data",
+                       naCol = "gray",naColBox= "lightgray", naLabel = "No Data",
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
                        add = FALSE,
@@ -33,6 +33,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   #process and spatialize statistics
   if(!is.null(sfby)) sfby.code <- switch(sfby,
     "countries" = "M49",
+    "countries_lowres" = "M49",
     "fao_areas" = "F_CODE",
     "fao_areas_inland" = "F_AREA_INL",
     NULL
@@ -70,8 +71,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   #base continent
   if(!add){
     continent_layer <- "continent"
-    if(!is.null(sfby)) if(sfby == "countries") continent_layer = "continent_nopole"
-    plot(layers[[continent_layer]][1], col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
+    if(!is.null(sfby)) if(startsWith(sfby,"countries")){
+      continent_layer = "continent_nopole"
+    }
+    if(!is.null(continent_layer)) plot(layers[[continent_layer]][1], col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
   }
   
   #intervals
@@ -120,20 +123,38 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   #statistics
   if(maptype == "choropleth"){
     print(class(classColours))
-    sf$colour <- classColours
-    plot(sf[1], lty=0, bg=bgCol, border="transparent", col=classColours, add = TRUE)
-    plot(sf[!is.na(sf$ROMNAM) & sf$ROMNAM == "Aksai Chin", ][1], lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
+    #main choropleth
+    plot(sf, lty=0, bg=bgCol, border="transparent", col=classColours, add = TRUE)
+    sf[["colour"]] = classColours
+    color_df = unique(data.frame(code = sf[[sfby.code]], col = classColours))
+    #small features (islands, etc)
+    sf_small = sf
+    if(!is.null(sfby)) if(sfby=="countries_lowres"){
+      sf_small = spatialize_dataset(
+        sf = sf, sfby = "countries", sfby.code = sfby.code, 
+        stats = stats, by = by, variable = variable, 
+        maptype = maptype, 
+        m49_codes_to_hide = m49_codes_to_hide
+      )
+      if("Aksai Chin" %in% sf_small$ROMNAM) print("yupi")
+      sf_small = merge(sf_small, color_df, by.x = sfby.code, by.y = "code", all.x = TRUE)
+      if("Aksai Chin" %in% sf_small$ROMNAM) print("yupi 2")
+    }
+    print(colnames(sf_small))
+    print(nrow(sf_small))
+    print(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ])
+    sp::plot(as(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ], "Spatial"), lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
     if(add_small_features_as_dots){
-      small.sf <- sf[sf$Shape_STAr < 0.8 & !is.na(sf$MAPLAB),]
+      small.sf <- sf_small[sf_small$Shape_STAr < 0.8 & !is.na(sf_small$MAPLAB),]
       if(!add_small_NA_features_as_dots){
         small.sf <- small.sf[!is.na(small.sf[[variable]]),]
       }
-      plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 19, cex = small_features_dots_cex, col = small.sf$colour, add = TRUE)
+      plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 19, cex = small_features_dots_cex, col = small.sf$col, add = TRUE)
     }
   }
   
   #add UN boundaries
-  if(!is.null(sfby)) if(sfby == "countries") if(!add){
+  if(!is.null(sfby)) if(startsWith(sfby, "countries")) if(!add){
     boundaries = layers$boundaries
     plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
     plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)

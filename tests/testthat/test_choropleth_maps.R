@@ -7,8 +7,20 @@ test_that("create map - choropleth 1",{
   
   df <- as.data.frame(readr::read_csv(system.file("extdata/examples/sofia_2022_fish_consumption.csv", package = "mapit")))
   
-  pdf("test_map_choropleth_1.pdf", width = 15, height = 10)
-  mapit::create_map(sfby = "countries", stat = df, by = "M49", variable = "VALUE", digits = 0,
+  pdf("test_map_choropleth_1_highres.pdf", width = 13, height = 7)
+  par(mar = rep(0.01,4))
+  create_map(sfby = "countries", stats = df, by = "M49", variable = "VALUE", digits = 0,
+                    classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
+                    breaks = c(0,5,10,25,50,max(df$VALUE)), 
+                    boundCol = "grey", 
+                    legendtitle = "AVERAGE AQUATIC FOODS CONSUMPTION PER CAPITA\n(IN KG/YEAR)",
+                    legendunit = ""
+  )
+  dev.off()
+  
+  pdf("test_map_choropleth_1_lowres.pdf", width = 13, height = 7)
+  par(mar = rep(0.01,4))
+  create_map(sfby = "countries_lowres", stats = df, by = "M49", variable = "VALUE", digits = 0,
                     classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
                     breaks = c(0,5,10,25,50,max(df$VALUE)),
                     boundCol = "grey", 
@@ -16,6 +28,7 @@ test_that("create map - choropleth 1",{
                     legendunit = ""
   )
   dev.off()
+  
 })
 
 test_that("create map - choropleth 2",{

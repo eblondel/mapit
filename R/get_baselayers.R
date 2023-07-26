@@ -21,10 +21,16 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("continent_nopole", "fifao:UN_CONTINENT2_NOPOLE", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("continent", "fifao:UN_CONTINENT2", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("countries", "fifao:country_bounds", "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("countries_lowres", "fifao:country_bounds_legacy", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("boundaries", "fifao:UN_intbnd", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_CWP", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
+  
+  countries_lowres = get_baselayers()$countries_lowres
+  countries_lowres[!is.na(countries_lowres$M49) & countries_lowres$M49 == 504,]$the_geom = get_baselayers()$countries[!is.na(get_baselayers()$countries$M49) & get_baselayers()$countries$M49 == 504,]$geom
+  .mapit.cache$layers$countries_lowres = countries_lowres
+  
   return(.mapit.cache$layers)
 }
 
@@ -61,6 +67,12 @@ get_baselayer <- function(id, layer, crs = NULL, cache = TRUE){
   out$rowid <- 1:nrow(out)
   if(!is.null(crs)) if(crs != 4326){
     out <- sf::st_transform(out, crs = crs)
+    if(layer == "fifao:country_bounds_legacy"){
+      out <- rbind(
+        out[is.na(out$ISO_3),],
+        out[!is.na(out$ISO_3) & out$ISO_3 != "EUR",]
+      )
+    }
   }
   
   if(cache) .mapit.cache$layers[[id]] <- out

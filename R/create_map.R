@@ -194,7 +194,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
         buf_dist = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2
         buf = sf::st_buffer(sf_points[i,], dist = buf_dist)
-        coords = sf::st_coordinates(sf_points)
+        coords = sf::st_coordinates(sf_points[i,])
         buf_vertical_diameter = sf::st_linestring(rbind(c(coords[1,1], coords[1,2]-buf_dist),c(coords[1,1], coords[1,2]+buf_dist)))
         buf_rect <- switch(pch,
           "\u25D6" = sf::st_buffer(buf_vertical_diameter, dist = buf_dist, singleSide = TRUE),

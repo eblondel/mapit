@@ -26,14 +26,17 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
          "graduated_linear_symbols" = {
            level.seq = seq(level.min, level.max, by = (level.max-level.min)/(length(levels)-1))
            outsf$CLASS <- 0
+           print(levels)
            for(i in 1:length(levels)){
              lev <- levels[[i]]
+             print(outsf[[variable]])
              if(i==1){
-               outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
+               if(any(outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }else{
-               outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
+               if(any(outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }
            }
+           print("ended")
          },
          "graduated_mean_symbols" = {
            outsf$CLASS <- 0
@@ -46,9 +49,9 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
            for(i in 1:length(mids)){
              lev <- levels[[i]]
              if(i==1){
-               outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
+               if(any(outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }else{
-               outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
+               if(any(outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }
            }
          }

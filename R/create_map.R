@@ -200,6 +200,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
           "\u25D6" = sf::st_buffer(buf_vertical_diameter, dist = buf_dist, singleSide = TRUE),
           "\u25D7" = sf::st_buffer(buf_vertical_diameter, dist = -buf_dist, singleSide = TRUE)
         )
+        sf::st_crs(buf_rect) = sf::st_crs(buf)
         half_buffer = sf::st_intersection(buf, buf_rect)
         return(half_buffer)
       })), lty=1, bg="transparent", col = "transparent", lwd = halolwd, border = halocol, add = TRUE)

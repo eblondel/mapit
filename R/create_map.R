@@ -6,7 +6,7 @@
 #'
 create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
-                       maptype = "choropleth", classtype = "jenks", classnumber = 5,  breaks,
+                       maptype = "choropleth", classtype = "jenks", classnumber = 5,  classints = NULL, breaks,
                        col = "black", pal = NULL, invertpal = FALSE,
                        bgCol = "transparent", bgBorderCol = "transparent", faoareasCol = "blue", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
@@ -80,12 +80,12 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   #intervals
   # defining INTERVALS
   classColours <- NULL
-  classints <- NULL
   if (classtype %in% c("equal","pretty","quantile","fisher","jenks")){
     
     if(classnumber < 2)  stop("The number of class must be greater than 1")
-    classints<-classInt::classIntervals(as.numeric(sf[[variable]]),n = classnumber,style = classtype, dataPrecision = digits)
-    
+    if(is.null(classints)){
+      classints<-classInt::classIntervals(as.numeric(sf[[variable]]),n = classnumber,style = classtype, dataPrecision = digits)
+    }
     if(!is.null(pal)){
       if(is.function(pal)) pal = pal(classnumber)
       if(invertpal) pal <- rev(pal)
@@ -104,7 +104,9 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       stop("The parameter [breaks] is not specified")
     }else{
       classnumber = length(breaks)
-      classints<-classInt::classIntervals(as.numeric(sf[[variable]]),style = "fixed",n = classnumber, fixedBreaks=breaks, dataPrecision=digits)
+      if(is.null(classints)){
+        classints<-classInt::classIntervals(as.numeric(sf[[variable]]),style = "fixed",n = classnumber, fixedBreaks=breaks, dataPrecision=digits)
+      }
       
       if(!is.null(pal)){
         if(is.function(pal)) pal = pal(classnumber)

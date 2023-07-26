@@ -203,7 +203,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         buf_rect = sf::st_sf(sf::st_sfc(buf_rect), crs = sf::st_crs(buf))
         half_buffer = sf::st_intersection(buf, buf_rect)
         return(half_buffer)
-      })), lty=1, bg="transparent", col = "transparent", lwd = halolwd, border = halocol, add = TRUE)
+      })), lty=1, bg="transparent", col = col, lwd = halolwd, border = halocol, add = TRUE)
     }
     
     if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){

@@ -36,8 +36,8 @@ get_baselayers <- function(clear = FALSE){
   spm_shn = spm_shn[,c("ROMNAM", "ISO3CD", "M49")]
   colnames(spm_shn) = c("Terr_Name","ISO_3","M49","the_geom")
   sf::st_geometry(spm_shn) <- "the_geom"
-  countries_lowres = plyr::rbind.fill(countries_lowres, spm_shn)
-  
+  countries_lowres = sf::st_sf(plyr::rbind.fill(countries_lowres, spm_shn), sf_column_name = "the_geom")
+  countries_lowres$rowid <- 1:nrow(countries_lowres)
   .mapit.cache$layers$countries_lowres = countries_lowres
   
   return(.mapit.cache$layers)

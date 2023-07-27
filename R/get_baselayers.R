@@ -27,8 +27,17 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
   
+  #patches for country_bounds_lowres
+  #patch for Morocco boundaries
   countries_lowres = get_baselayers()$countries_lowres
   countries_lowres[!is.na(countries_lowres$M49) & countries_lowres$M49 == 504,]$the_geom = get_baselayers()$countries[!is.na(get_baselayers()$countries$M49) & get_baselayers()$countries$M49 == 504,]$geom
+  #patch to recover SPM and SHN (not visible in country_bounds_lowres)
+  spm_shn = get_baselayers()$countries[!is.na(get_baselayers()$countries$ISO3CD) & get_baselayers()$countries$ISO3CD %in% c("SPM", "SHN"),]
+  spm_shn = spm_shn[,c("ROMNAM", "ISO3CD", "M49")]
+  colnames(spm_shn) = c("Terr_Name","ISO_3","M49","the_geom")
+  sf::st_geometry(spm_shn) <- "the_geom"
+  countries_lowres = plyr::rbind.fill(countries_lowres, spm_shn)
+  
   .mapit.cache$layers$countries_lowres = countries_lowres
   
   return(.mapit.cache$layers)

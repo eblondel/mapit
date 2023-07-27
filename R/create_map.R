@@ -44,10 +44,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     maptype = maptype, 
     m49_codes_to_hide = m49_codes_to_hide
   )
-  if(nrow(sf)==0){
-    showtext::showtext_auto(FALSE)
-    return(NULL)
-  }
+  #if(nrow(sf)==0){
+  #  showtext::showtext_auto(FALSE)
+  #  return(NULL)
+  #}
   
   #background
   bg_layer = NULL

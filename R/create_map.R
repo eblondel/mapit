@@ -169,9 +169,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         maptype = maptype, 
         m49_codes_to_hide = m49_codes_to_hide
       )
-      if("Aksai Chin" %in% sf_small$ROMNAM) print("yupi")
       sf_small = merge(sf_small, color_df, by.x = sfby.code, by.y = "code", all.x = TRUE)
-      if("Aksai Chin" %in% sf_small$ROMNAM) print("yupi 2")
     }
     sp::plot(as(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ], "Spatial"), lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
     if(add_small_features_as_dots){

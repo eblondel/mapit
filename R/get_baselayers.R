@@ -23,14 +23,15 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("countries", "fifao:country_bounds", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("countries_lowres", "fifao:country_bounds_legacy", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("boundaries", "fifao:UN_intbnd", "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("boundaries_lowres", "fifao:UN_intbnd_legacy", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_CWP", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
   
   #patches for country_bounds_lowres
-  #patch for Morocco boundaries
   countries_lowres = get_baselayers()$countries_lowres
-  countries_lowres[!is.na(countries_lowres$M49) & countries_lowres$M49 == 504,]$the_geom = get_baselayers()$countries[!is.na(get_baselayers()$countries$M49) & get_baselayers()$countries$M49 == 504,]$geom
+  #patch for Morocco boundaries
+  #countries_lowres[!is.na(countries_lowres$M49) & countries_lowres$M49 == 504,]$the_geom = get_baselayers()$countries[!is.na(get_baselayers()$countries$M49) & get_baselayers()$countries$M49 == 504,]$geom
   #patch to recover SPM and SHN (not visible in country_bounds_lowres)
   spm_shn = get_baselayers()$countries[!is.na(get_baselayers()$countries$ISO3CD) & get_baselayers()$countries$ISO3CD %in% c("SPM", "SHN"),]
   spm_shn = spm_shn[,c("ROMNAM", "ISO3CD", "M49")]

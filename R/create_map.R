@@ -192,24 +192,25 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       }
     }else{
       #with simple symbols
-      plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
+      if(is.integer(pch)) plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
     }
     
     #case of proportional half circles
-    if(halo) if(is.character(pch)) if(pch %in% c("\u25D6","\u25D7")){
+    if(is.character(pch)) if(pch %in% c("moon_left","moon_right")){
+      print("Adding semi-circle halos")
       plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){
         buf_dist = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(sf_points[i,]$CLASS, "chars", "user")))/2
         buf = sf::st_buffer(sf_points[i,], dist = buf_dist)
         coords = sf::st_coordinates(sf_points[i,])
         buf_vertical_diameter = sf::st_linestring(rbind(c(coords[1,1], coords[1,2]-buf_dist),c(coords[1,1], coords[1,2]+buf_dist)))
         buf_rect <- switch(pch,
-          "\u25D6" = sf::st_buffer(buf_vertical_diameter, dist = buf_dist, singleSide = TRUE),
-          "\u25D7" = sf::st_buffer(buf_vertical_diameter, dist = -buf_dist, singleSide = TRUE)
+          "moon_left" = sf::st_buffer(buf_vertical_diameter, dist = buf_dist, singleSide = TRUE),
+          "moon_right" = sf::st_buffer(buf_vertical_diameter, dist = -buf_dist, singleSide = TRUE)
         )
         buf_rect = sf::st_sf(sf::st_sfc(buf_rect), crs = sf::st_crs(buf))
         half_buffer = sf::st_intersection(buf, buf_rect)
         return(half_buffer)
-      })), lty=1, bg="transparent", col = col, lwd = halolwd, border = halocol, add = TRUE)
+      })), lty=1, bg="transparent", col = col, lwd = halolwd, border = if(halo) halocol else "transparent", add = TRUE)
     }
     
     if(debug) plot(do.call("rbind", lapply(1:nrow(sf_points),function(i){

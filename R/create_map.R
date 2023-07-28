@@ -77,6 +77,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     continent_layer <- "continent"
     if(!is.null(sfby)) if(startsWith(sfby,"countries")){
       continent_layer = "continent_nopole"
+      if(maptype == "choropleth") continent_layer = NULL
     }
     if(!is.null(continent_layer)) plot(layers[[continent_layer]][1], col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
   }
@@ -126,11 +127,37 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   
   #
   
-  #statistics
+  #statistics for main choropleth
   if(maptype == "choropleth"){
-    print(class(classColours))
-    #main choropleth
     plot(sf, lty=0, bg=bgCol, border="transparent", col=classColours, add = TRUE)
+  }
+  
+  #add UN boundaries
+  if(!is.null(sfby)) if(startsWith(sfby, "countries")) if(!add){
+
+    switch(sfby,
+      "countries" = {
+        boundaries = layers$boundaries
+        plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
+        plot(boundaries[boundaries$TYPE == 4 & boundaries$ISO3_CNT1 == "IND" & boundaries$ISO3_CNT2 == "PAK",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
+      },
+      "countries_lowres" = {
+        boundaries = layers$boundaries_lowres
+        plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
+        plot(boundaries[boundaries$TYPE == 5,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
+        plot(boundaries[boundaries$TYPE == 6,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
+        plot(boundaries[boundaries$TYPE == 5 & boundaries$ISO3_CNT1 == "PAK" & boundaries$ISO3_CNT2 == "IND",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
+      }
+    )
+  }
+  
+  if(maptype == "choropleth"){
     sf[["colour"]] = classColours
     color_df = unique(data.frame(code = sf[[sfby.code]], col = classColours))
     #small features (islands, etc)
@@ -146,26 +173,14 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       sf_small = merge(sf_small, color_df, by.x = sfby.code, by.y = "code", all.x = TRUE)
       if("Aksai Chin" %in% sf_small$ROMNAM) print("yupi 2")
     }
-    print(colnames(sf_small))
-    print(nrow(sf_small))
-    print(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ])
     sp::plot(as(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ], "Spatial"), lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
     if(add_small_features_as_dots){
       small.sf <- sf_small[sf_small$Shape_STAr < 0.8 & !is.na(sf_small$MAPLAB),]
       if(!add_small_NA_features_as_dots){
         small.sf <- small.sf[!is.na(small.sf[[variable]]),]
       }
-      plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 19, cex = small_features_dots_cex, col = small.sf$col, add = TRUE)
+      plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 21, cex = small_features_dots_cex, col = small.sf$col, bg = "transparent", add = TRUE)
     }
-  }
-  
-  #add UN boundaries
-  if(!is.null(sfby)) if(startsWith(sfby, "countries")) if(!add){
-    boundaries = layers$boundaries
-    plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
-    plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
-    plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
-    plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
   }
   
   #other maptypes to be displayed after UN boundaries

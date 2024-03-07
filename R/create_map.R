@@ -12,7 +12,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                        pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", plot.handler = NULL,
-                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = "black", legend_nesting = FALSE, 
+                       legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = "black", 
+                       legend_items = NULL, legend_nesting = FALSE, 
                        halo = FALSE, halocol = "black", halolwd = 1,
                        naCol = "gray",naColBox= "lightgray", naLabel = "No Data",
                        add_disclaimers = TRUE,
@@ -246,8 +247,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     legendX <- -16800000
     legendY <- -4000000
     if(maptype == "choropleth"){
+      legend_labels = label
+      if(!is.null(legend_items)) legend_labels = legend_items
       create_legend(legendX, legendY, fill=attr(classColours,"palette"), cex=0.8, y.intersp=1.5, 
-                    legend=label, text.width = labelLength, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+                    legend=legend_labels, text.width = labelLength, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                     box.factor = 2,
                     family = family, text.font = 1)
       #legend for 'no data'

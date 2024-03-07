@@ -15,7 +15,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = "black", 
                        legend_items = NULL, legend_nesting = FALSE, 
                        halo = FALSE, halocol = "black", halolwd = 1,
-                       naCol = "gray",naColBox= "lightgray", naLabel = "No Data",
+                       naCol = "gray",naColBox= "lightgray", naLabel = "No Data", naHashCol = NULL, naHashLwd = 0.1, naHashDensity = 50,
                        add_disclaimers = TRUE,
                        add_copyright = TRUE,
                        add = FALSE,
@@ -86,6 +86,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   #intervals
   # defining INTERVALS
   classColours <- NULL
+  naIndexes <- NULL
   if (classtype %in% c("equal","pretty","quantile","fisher","jenks")){
     
     if(classnumber < 2)  stop("The number of class must be greater than 1")
@@ -96,7 +97,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       if(is.function(pal)) pal = pal(classnumber)
       if(invertpal) pal <- rev(pal)
       classColours<-classInt::findColours(classints,pal = pal)
-      classColours[is.na(classColours)]<-naCol # added otherwise is transparent!
+      naIndexes=is.na(classColours)
+      classColours[naIndexes]<-naCol # added otherwise is transparent!
     }
     
     #enrich with class
@@ -118,7 +120,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         if(is.function(pal)) pal = pal(classnumber)
         if(invertpal) pal <- rev(pal)
         classColours<-classInt::findColours(classints,pal = pal)
-        classColours[is.na(classColours)]<-naCol # added otherwise is transparent!
+        naIndexes=is.na(classColours)
+        classColours[naIndexes]<-naCol # added otherwise is transparent!
       }
       
       #enrich with class
@@ -131,6 +134,9 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   #statistics for main choropleth
   if(maptype == "choropleth"){
     plot(sf, lty=0, bg=bgCol, border="transparent", col=classColours, add = TRUE)
+    if(!is.null(naHashCol)){
+      sp::plot(as(sf[naIndexes & !is.na(sf[[sfby.code]]),], "Spatial"), lty=1, border = naHashCol, col=naHashCol, lwd=naHashLwd, density=naHashDensity, add = TRUE)
+    }
   }
   
   #add UN boundaries
@@ -256,9 +262,15 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
       #legend for 'no data'
       naLabelLength = nchar(naLabel)
       legendItemY <- 640000
-      create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, box.factor = 2, cex=0.8, y.intersp=1.5, 
-                 legend=naLabel, text.width = naLabelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
-                 family = family, text.font = 1)
+      if(!is.null(naHashCol)){
+        create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naHashCol, lty=1, border = naHashCol, col="transparent", lwd=0.1, density=50, box.factor = 2, cex=0.8, y.intersp=1.5, 
+                      legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, text.col=legendcol, adj = 0.25,
+                      family = family, text.font = 1)
+      }else{
+        create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, box.factor = 2, cex=0.8, y.intersp=1.5, 
+                   legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, border="transparent", text.col=legendcol, adj = 0.25,
+                   family = family, text.font = 1)
+      }
     }else if(startsWith(maptype,"graduated")){
       
       classes <- unique(sf$CLASS)

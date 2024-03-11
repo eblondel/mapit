@@ -27,6 +27,7 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_CWP", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("un_sdg_regions", "fifao:cl_un_sdg_regions", "+proj=eck4", cache = TRUE))
   
   #patches for country_bounds_lowres
   countries_lowres = get_baselayers()$countries_lowres

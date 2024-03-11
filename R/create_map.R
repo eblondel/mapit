@@ -37,6 +37,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     "countries_lowres" = "M49",
     "fao_areas" = "F_CODE",
     "fao_areas_inland" = "F_AREA_INL",
+    "un_sdg_regions" = "code",
     NULL
   )
   sf <- spatialize_dataset(

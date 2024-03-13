@@ -11,7 +11,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        bgCol = "transparent", bgBorderCol = "transparent", faoareasCol = "blue", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
-                       pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", plot.handler = NULL,
+                       pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", 
+                       plot.type = "plot", plot.locator = "point_on_surface", plot.handler = NULL, plot.size = c(0.15, 0.15),
                        legend = TRUE, legendtitle = "Legend", legendunit = "", legendcol = "black", legendpch = pch, legendcex = 0.8, legendpchcol = "black", 
                        legend_items = NULL, legend_nesting = FALSE, 
                        halo = FALSE, halocol = "black", halolwd = 1,
@@ -151,6 +152,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 4 & boundaries$ISO3_CNT1 == "IND" & boundaries$ISO3_CNT2 == "PAK",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
+        plot(layers$WBYA25, col = "white", border = "transparent", add = TRUE)
       },
       "countries_lowres" = {
         boundaries = layers$boundaries_lowres
@@ -161,6 +163,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         plot(boundaries[boundaries$TYPE == 5,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 6,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 5 & boundaries$ISO3_CNT1 == "PAK" & boundaries$ISO3_CNT2 == "IND",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
+        plot(layers$WBYA25, col = "white", border = "transparent", add = TRUE)
       }
     )
   }
@@ -190,12 +193,20 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   }
   
   #other maptypes to be displayed after UN boundaries
-  if(startsWith(maptype, "graduated")){
+  if(endsWith(maptype, "symbols")){
     if(!is.null(sfby)) if(sfby == "fao_areas"){
       fao_areas_lines <- layers$fao_areas_lines
       plot(fao_areas_lines, bg=bgCol, col=faoareasCol, add = TRUE)
     }
-    sf_points <- sf::st_point_on_surface(sf)
+    plot_location_handler = switch(plot.locator,
+      "point_on_surface" = sf::st_point_on_surface,
+      "centroid" = sf::st_centroid,
+      NULL
+    )
+    if(is.null(plot_location_handler)){
+      stop("plot.locator should be either 'point_on_surface' or 'centroid'")
+    }
+    sf_points <- plot_location_handler(sf)
     if(halo) if(!is.character(pch)){
       plot(sf_points, lwd=halolwd, bg="transparent", col = halocol, pch = 21, cex = sf$CLASS*2.5, add = TRUE)
     }
@@ -205,11 +216,36 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         sf_plot_obj <- sf_points[i,]
         sf_plot_obj_coords <- as.numeric(sf::st_coordinates(sf_plot_obj))
         subplot.size <- c(
-          graphics::grconvertX(sf_plot_obj$CLASS, "chars", "inches"),
-          graphics::grconvertY(sf_plot_obj$CLASS, "chars", "inches")
+          graphics::grconvertX(plot.size[1], "chars", "inches"),
+          graphics::grconvertY(plot.size[2], "chars", "inches")
         )
-        Hmisc::subplot(plot.handler(sf_plot_obj), size = subplot.size, x = sf_plot_obj_coords[1], y = sf_plot_obj_coords[2], 
-                       pars = list(mar = rep(0.1,4)))
+        if(startsWith(maptype, "graduated")){
+          subplot.size = c(
+            graphics::grconvertX(sf_plot_obj$CLASS, "chars", "inches"),
+            graphics::grconvertY(sf_plot_obj$CLASS, "chars", "inches")
+          )
+        }
+        switch(plot.type,
+          "plot" = {
+            Hmisc::subplot(
+              plot.handler(sf_plot_obj), 
+              size = subplot.size, 
+              x = sf_plot_obj_coords[1], 
+              y = sf_plot_obj_coords[2], 
+              pars = list(mar = rep(0.1,4))
+            )
+          },
+          "ggplot" = {
+            vp = grid::viewport(
+              width = plot.size[1], 
+              height = plot.size[2], 
+              x = grconvertX(sf::st_coordinates(sf_plot_obj)[1], "user", "npc"),
+              y = grconvertY(sf::st_coordinates(sf_plot_obj)[2], "user", "npc")
+            )
+            gg = plot.handler(sf_plot_obj)
+            print(gg, vp = vp)
+          }
+        )
       }
     }else{
       #with simple symbols

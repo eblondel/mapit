@@ -8,7 +8,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  classints = NULL, breaks,
                        col = "black", pal = NULL, invertpal = FALSE,
-                       bgCol = "transparent", bgBorderCol = "transparent", faoareasCol = "blue", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
+                       bgCol = "transparent", bgBorderCol = "transparent",faoareas = FALSE, faoareasLwd = 1, faoareasCol = "blue", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                        pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", 
@@ -194,9 +194,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   
   #other maptypes to be displayed after UN boundaries
   if(endsWith(maptype, "symbols")){
-    if(!is.null(sfby)) if(sfby == "fao_areas"){
+    if(!is.null(sfby)) if(sfby == "fao_areas") faoareas = TRUE
+    if(faoareas){
       fao_areas_lines <- layers$fao_areas_lines
-      plot(fao_areas_lines, bg=bgCol, col=faoareasCol, add = TRUE)
+      plot(fao_areas_lines, bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
     }
     plot_location_handler = switch(plot.locator,
       "point_on_surface" = sf::st_point_on_surface,

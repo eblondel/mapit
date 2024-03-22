@@ -2,14 +2,14 @@ Package: mapit
 Type: Package
 Title: Toosl to produce UN standard maps
 Version: 0.1
-Date: 2023-07-12
+Date: 2024-03-22
 Description: Provides tools to automate production of UN standard maps while applying thematic cartography best practices.
 Authors@R: c(
   person("Emmanuel", "Blondel", role = c("aut", "cre"), email = "emmanuel.blondel1@gmail.com", comment = c(ORCID = "0000-0002-5870-5762")),
   person("Alexandre", "Bennici", role = c("ctb"), comment = c(ORCID = "0000-0003-2160-3487")))
 Maintainer: Emmanuel Blondel <emmanuel.blondel1@gmail.com>
 Depends: R (>= 4.0)
-Imports: sysfonts, showtext, sf, sp, classInt, ows4R, Hmisc, geosphere, shape, plotrix
+Imports: sysfonts, showtext, sf, sp, classInt, ows4R, Hmisc, geosphere, shape, plotrix, terra
 Suggests: testthat, roxygen2
 License: GPL (>=3)
 URL: https://github.com/eblondel/mapit, https://eblondel.github.io/mapit/

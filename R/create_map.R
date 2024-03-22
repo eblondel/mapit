@@ -8,7 +8,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  classints = NULL, breaks,
                        col = "black", pal = NULL, invertpal = FALSE,
-                       bgCol = "transparent", bgBorderCol = "transparent",faoareas = FALSE, faoareasLwd = 1, faoareasCol = "blue", boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
+                       bgCol = "transparent", bgBorderCol = "transparent",
+                       faoareas = FALSE, faoareasLwd = 1, faoareasCol = "blue", faoareasLabels = TRUE,
+                       un_sdg_maptype = "nocolor",
+                       boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
                        m49_codes_to_hide = "010",
                        add_small_features_as_dots = TRUE, add_small_NA_features_as_dots = FALSE, small_features_dots_cex = 0.4,
                        pch = 21, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars", 
@@ -39,6 +42,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     "fao_areas" = "F_CODE",
     "fao_areas_inland" = "F_AREA_INL",
     "un_sdg_regions" = "code",
+    "un_sdg_regions_placemarks" = "code",
     NULL
   )
   sf <- spatialize_dataset(
@@ -198,6 +202,39 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     if(faoareas){
       fao_areas_lines <- layers$fao_areas_lines
       plot(fao_areas_lines, bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
+      #labels
+      if(faoareasLabels){
+        major_areas = sf::st_point_on_surface(layers$fao_areas[layers$fao_areas$F_LEVEL == "MAJOR",])
+        major_areas.sv = as(major_areas, "SpatVector")
+        terra::text(major_areas.sv, labels = major_areas$F_CODE, halo = T, col = "white", hc = "black", hw=0.1, cex = 0.8) 
+      }
+    }
+    if(sfby == "un_sdg_regions_placemarks"){
+      un_sdg_regions = layers$un_sdg_regions_lowres
+      switch(un_sdg_maptype,
+        "color-fill" = {
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_ENA",], bg = bgCol, lwd = 1, col = "#7bcafd", border = "white", add = TRUE)
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_LAC",], bg = bgCol, lwd = 1, col = "#77e4ff", border = "white", add = TRUE)
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_SSA",], bg = bgCol, lwd = 1, col = "#f58ac4", border = "white", add = TRUE)
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_NAWA",], bg = bgCol, lwd = 1, col = "#fcc885", border = "white", add = TRUE)
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_CSA",], bg = bgCol, lwd = 1, col = "#F36D25", border = "white", add = TRUE)
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_ESEA",], bg = bgCol, lwd = 1, col = "#9fe7b4", border = "white", add = TRUE)
+          plot(un_sdg_regions[un_sdg_regions$code == "SDG_OCE",], bg = bgCol, lwd = 1, col = "#EB1C2D", border = "white", add = TRUE)
+        },
+        "color-hash" = {
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_ENA",],"Spatial"), bg = bgCol, lwd = 1, col = "#7bcafd", border = "#7bcafd", density = 25, add = TRUE)
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_LAC",],"Spatial"), bg = bgCol, lwd = 1, col = "#77e4ff", border = "#77e4ff", density = 25, add = TRUE)
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_SSA",],"Spatial"), bg = bgCol, lwd = 1, col = "#f58ac4", border = "#f58ac4", density = 25, add = TRUE)
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_NAWA",],"Spatial"), bg = bgCol, lwd = 1, col = "#fcc885", border = "#fcc885", density = 25, add = TRUE)
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_CSA",],"Spatial"), bg = bgCol, lwd = 1, col = "#F36D25", border = "#F36D25", density = 25, add = TRUE)
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_ESEA",],"Spatial"), bg = bgCol, lwd = 1, col = "#9fe7b4", border = "#9fe7b4", density = 25, add = TRUE)
+          sp::plot(as(un_sdg_regions[un_sdg_regions$code == "SDG_OCE",],"Spatial"), bg = bgCol, lwd = 1, col = "#EB1C2D", border = "#EB1C2D", density = 25, add = TRUE)
+        },
+        "nocolor" = {
+          plot(un_sdg_regions, bg = bgCol, lwd = 1, col = "transparent", border = "black", add = TRUE)
+        },
+        plot(un_sdg_regions, bg = bgCol, lwd = 1, col = "transparent", border = "black", add = TRUE)
+      )
     }
     plot_location_handler = switch(plot.locator,
       "point_on_surface" = sf::st_point_on_surface,

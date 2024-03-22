@@ -29,6 +29,7 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("WBYA25", "fifao:WBYA25", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("un_sdg_regions", "fifao:cl_un_sdg_regions", "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("un_sdg_regions_lowres", "fifao:cl_un_sdg_regions_lowres", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("un_sdg_regions_placemarks", "fifao:cl_un_sdg_regions_placemarks", "+proj=eck4", cache = TRUE))
   
   #patches for country_bounds_lowres

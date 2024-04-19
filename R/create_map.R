@@ -201,7 +201,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     if(!is.null(sfby)) if(sfby == "fao_areas") faoareas = TRUE
     if(faoareas){
       fao_areas_lines <- layers$fao_areas_lines
-      plot(fao_areas_lines, bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
+      plot(fao_areas_lines[1], bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
       #labels
       if(faoareasLabels){
         major_areas = sf::st_point_on_surface(layers$fao_areas[layers$fao_areas$F_LEVEL == "MAJOR",])
@@ -324,14 +324,14 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     } 
     x<-print(classLeg,cutlabels=F,over=">",under="<")
     label = paste(names(x), legendunit)
-    labelLength = nchar(label)
     legendX <- -16800000
     legendY <- -4000000
     if(maptype == "choropleth"){
       legend_labels = label
+      legend_labels_length = nchar(legend_labels)
       if(!is.null(legend_items)) legend_labels = legend_items
       create_legend(legendX, legendY, fill=attr(classColours,"palette"), cex=0.8, y.intersp=1.5, 
-                    legend=legend_labels, text.width = labelLength, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+                    legend=legend_labels, text.width = legend_labels_length, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                     box.factor = 2,
                     family = family, text.font = 1)
       #legend for 'no data'
@@ -342,8 +342,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                       legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, text.col=legendcol, adj = 0.25,
                       family = family, text.font = 1)
       }else{
-        create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, box.factor = 2, cex=0.8, y.intersp=1.5, 
-                   legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, border="transparent", text.col=legendcol, adj = 0.25,
+        create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, border = "grey", box.factor = 2, cex=0.8, y.intersp=1.5, 
+                   legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, text.col=legendcol, adj = 0.25,
                    family = family, text.font = 1)
       }
     }else if(startsWith(maptype,"graduated")){

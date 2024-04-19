@@ -103,7 +103,7 @@ create_legend <- function (x, y = NULL, legend, fill = NULL, col = par("col"),
   if (is.null(text.width)) 
     text.width <- max(abs(strwidth(legend, units = "user", 
                                    cex = cex, font = text.font)))
-  else if (!is.numeric(text.width) || text.width < 0) 
+  else if (!is.numeric(text.width) || any(text.width < 0)) 
     stop("'text.width' must be numeric, >= 0")
   xyc <- xyinch(par("cin"), warn.log = FALSE)
   xc <- Cex * xyc[1L]

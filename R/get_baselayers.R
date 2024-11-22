@@ -24,7 +24,7 @@ get_baselayers <- function(clear = FALSE){
   invisible(get_baselayer("countries_lowres", "fifao:country_bounds_legacy", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("boundaries", "fifao:UN_intbnd", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("boundaries_lowres", "fifao:UN_intbnd_legacy", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_CWP", "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_ERASE_LOWRES", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
   invisible(get_baselayer("WBYA25", "fifao:WBYA25", "+proj=eck4", cache = TRUE))

@@ -8,7 +8,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  classints = NULL, breaks,
                        col = "black", pal = NULL, invertpal = FALSE,
-                       bgCol = "transparent", bgBorderCol = "transparent",
+                       bgCol = "transparent", bgBorderCol = "transparent", waterbCol = bgCol,
                        faoareas = FALSE, faoareasLwd = 1, faoareasCol = "blue", faoareasLabels = TRUE,
                        un_sdg_maptype = "nocolor",
                        boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
@@ -156,7 +156,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 4 & boundaries$ISO3_CNT1 == "IND" & boundaries$ISO3_CNT2 == "PAK",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
-        plot(layers$WBYA25, col = "white", border = "transparent", add = TRUE)
+        plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
       },
       "countries_lowres" = {
         boundaries = layers$boundaries_lowres
@@ -167,7 +167,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         plot(boundaries[boundaries$TYPE == 5,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 6,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 5 & boundaries$ISO3_CNT1 == "PAK" & boundaries$ISO3_CNT2 == "IND",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
-        plot(layers$WBYA25, col = "white", border = "transparent", add = TRUE)
+        plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
       }
     )
   }

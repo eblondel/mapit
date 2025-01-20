@@ -18,19 +18,20 @@
 get_baselayers <- function(clear = FALSE){
   if(clear) .mapit.cache$layers <- NULL
   if(!is.null(.mapit.cache$layers)) return(.mapit.cache$layers)
-  invisible(get_baselayer("continent_nopole", "fifao:UN_CONTINENT2_NOPOLE", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("continent", "fifao:UN_CONTINENT2", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("countries", "fifao:country_bounds", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("countries_lowres", "fifao:country_bounds_legacy", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("boundaries", "fifao:UN_intbnd", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("boundaries_lowres", "fifao:UN_intbnd_legacy", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_ERASE_LOWRES", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("WBYA25", "fifao:WBYA25", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("un_sdg_regions", "fifao:cl_un_sdg_regions", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("un_sdg_regions_lowres", "fifao:cl_un_sdg_regions_lowres", "+proj=eck4", cache = TRUE))
-  invisible(get_baselayer("un_sdg_regions_placemarks", "fifao:cl_un_sdg_regions_placemarks", "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("continent_nopole", "fifao:UN_CONTINENT2_NOPOLE", crs ="+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("continent", "fifao:UN_CONTINENT2", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("countries", "fifao:country_bounds", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("countries_lowres", "fifao:country_bounds_legacy", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("boundaries", "fifao:UN_intbnd", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("boundaries_lowres", "fifao:UN_intbnd_legacy", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("fao_areas", "fifao:FAO_AREAS_ERASE_LOWRES", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("fao_areas_inland", "fifao:FAO_AREAS_INLAND", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("fao_areas_lines", "fifao:FAO_MAJOR_Lines_ERASE", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("fao_major_areas", "fifao:FAO_AREAS_ERASE_LOWRES", cql_filter = "F_LEVEL = 'MAJOR'", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("WBYA25", "fifao:WBYA25", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("un_sdg_regions", "fifao:cl_un_sdg_regions", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("un_sdg_regions_lowres", "fifao:cl_un_sdg_regions_lowres", crs = "+proj=eck4", cache = TRUE))
+  invisible(get_baselayer("un_sdg_regions_placemarks", "fifao:cl_un_sdg_regions_placemarks", crs = "+proj=eck4", cache = TRUE))
   
   #patches for country_bounds_lowres
   countries_lowres = get_baselayers()$countries_lowres
@@ -55,7 +56,7 @@ get_baselayers <- function(clear = FALSE){
 #' @description Get UN base layer as \pkg{sf} object based on UN-FAO Fisheries & Aquaculture Division
 #'  Geoserver (using the OGC WFS protocol).
 #'
-#' @usage get_baselayer(id, layer, crs, cache)
+#' @usage get_baselayer(id, layer, cql_filter, crs, cache)
 #' 
 #' @return an \code{list} of \pkg{sf} objects
 #' 
@@ -64,7 +65,7 @@ get_baselayers <- function(clear = FALSE){
 #'   get_baselayer("continent", "fifao:UN_CONTINENT2_NOPOLE")
 #' }
 #' 
-get_baselayer <- function(id, layer, crs = NULL, cache = TRUE){
+get_baselayer <- function(id, layer, cql_filter = NULL, crs = NULL, cache = TRUE){
   
   if(cache){
     if(is.null(.mapit.cache$layers)) .mapit.cache$layers <- list()
@@ -76,7 +77,11 @@ get_baselayer <- function(id, layer, crs = NULL, cache = TRUE){
     serviceVersion = "1.0.0"
   )
   
-  out <- WFS_UNFAO_NFI$getFeatures(layer)
+  out <- if(is.null(cql_filter)){
+    WFS_UNFAO_NFI$getFeatures(layer)
+  }else{
+    WFS_UNFAO_NFI$getFeatures(layer, cql_filter = cql_filter)
+  }
   sf::st_crs(out) <- 4326
   out$rowid <- 1:nrow(out)
   if(!is.null(crs)) if(crs != 4326){

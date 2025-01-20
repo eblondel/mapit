@@ -4,11 +4,12 @@
 #' @export
 #' @description Creates a map
 #'
-create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
+create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  classints = NULL, breaks,
                        col = "black", pal = NULL, invertpal = FALSE,
                        bgCol = "transparent", bgBorderCol = "transparent", waterbCol = bgCol,
+                       displayWaterboundaries = TRUE,
                        faoareas = FALSE, faoareasLwd = 1, faoareasCol = "blue", faoareasLabels = TRUE,
                        un_sdg_maptype = "nocolor",
                        boundCol = "white", contCol = "lightgray", hashCol= "lightgray",
@@ -40,6 +41,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     "countries" = "M49",
     "countries_lowres" = "M49",
     "fao_areas" = "F_CODE",
+    "fao_major_areas" = "F_CODE",
     "fao_areas_inland" = "F_CODE",
     "un_sdg_regions" = "code",
     "un_sdg_regions_placemarks" = "code",
@@ -60,8 +62,9 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
   bg_layer = NULL
   if(!add){
     coords <- data.frame(matrix(c(-180,-90,-180,90,180,90,180,-90,-180,-90),ncol=2, byrow=TRUE))
+    if(!is.null(bbox)) coords <- data.frame(matrix(c(bbox$xmin, bbox$ymin, bbox$xmin, bbox$ymax, bbox$xmax, bbox$ymax, bbox$xmax, bbox$ymin, bbox$xmin, bbox$ymin),ncol=2,byrow=TRUE))
     colnames(coords) <- c("X","Y")
-    each <- 0.1
+    each <- 2L
     newcoords <- do.call("rbind", lapply(1:(nrow(coords) - 1), function(i) {
       i_coords <- coords[i:(i + 1), ]
       out_coords <- data.frame(
@@ -150,15 +153,17 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
 
     switch(sfby,
       "countries" = {
+        if(displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE) 
         boundaries = layers$boundaries
         plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
         plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 4 & boundaries$ISO3_CNT1 == "IND" & boundaries$ISO3_CNT2 == "PAK",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
-        plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
+        if(!displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE) 
       },
       "countries_lowres" = {
+        if(displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
         boundaries = layers$boundaries_lowres
         plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
         plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
@@ -167,7 +172,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         plot(boundaries[boundaries$TYPE == 5,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 6,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 5 & boundaries$ISO3_CNT1 == "PAK" & boundaries$ISO3_CNT2 == "IND",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
-        plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
+        if(!displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
       }
     )
   }
@@ -185,30 +190,28 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         m49_codes_to_hide = m49_codes_to_hide
       )
       sf_small = merge(sf_small, color_df, by.x = sfby.code, by.y = "code", all.x = TRUE)
-    }
-    sp::plot(as(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ], "Spatial"), lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
-    if(add_small_features_as_dots){
-      small.sf <- sf_small[sf_small$Shape_STAr < 0.8 & !is.na(sf_small$MAPLAB),]
-      if(!add_small_NA_features_as_dots){
-        small.sf <- small.sf[!is.na(small.sf[[variable]]),]
+      
+      sp::plot(as(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ], "Spatial"), lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
+      if(add_small_features_as_dots){
+        small.sf <- sf_small[sf_small$Shape_STAr < 0.8 & !is.na(sf_small$MAPLAB),]
+        if(!add_small_NA_features_as_dots){
+          small.sf <- small.sf[!is.na(small.sf[[variable]]),]
+        }
+        plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 21, cex = small_features_dots_cex, col = small.sf$col, bg = "transparent", add = TRUE)
       }
-      plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 21, cex = small_features_dots_cex, col = small.sf$col, bg = "transparent", add = TRUE)
+      
     }
+  }
+  
+  #other maptypes
+  if(!is.null(sfby)) if(sfby %in% c("fao_areas","fao_major_areas")) faoareas = TRUE
+  if(faoareas){
+    fao_areas_lines <- layers$fao_areas_lines
+    plot(fao_areas_lines[1], bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
   }
   
   #other maptypes to be displayed after UN boundaries
   if(endsWith(maptype, "symbols")){
-    if(!is.null(sfby)) if(sfby == "fao_areas") faoareas = TRUE
-    if(faoareas){
-      fao_areas_lines <- layers$fao_areas_lines
-      plot(fao_areas_lines[1], bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
-      #labels
-      if(faoareasLabels){
-        major_areas = sf::st_point_on_surface(layers$fao_areas[layers$fao_areas$F_LEVEL == "MAJOR",])
-        major_areas.sv = as(major_areas, "SpatVector")
-        terra::text(major_areas.sv, labels = major_areas$F_CODE, halo = T, col = "white", hc = "black", hw=0.1, cex = 0.8) 
-      }
-    }
     if(sfby == "un_sdg_regions_placemarks"){
       un_sdg_regions = layers$un_sdg_regions_lowres
       switch(un_sdg_maptype,
@@ -314,6 +317,14 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     
   }
   
+  #adding labels
+  if(!is.null(sfby)) if(sfby %in% c("fao_areas", "fao_major_areas")) faoareas = TRUE
+  if(faoareas & faoareasLabels){
+    major_areas = sf::st_point_on_surface(layers$fao_areas[layers$fao_areas$F_LEVEL == "MAJOR",])
+    major_areas.sv = as(major_areas, "SpatVector")
+    terra::text(major_areas.sv, labels = major_areas$F_CODE, halo = T, col = "white", hc = "black", hw=0.1, cex = 0.8) 
+  }
+  
   if(legend) if(!is.null(classints)){
     #TODO legend coordinates elements are +eck4 oriented... need to provided generic solution
     #legend for classes
@@ -326,6 +337,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     label = paste(names(x), legendunit)
     legendX <- -16800000
     legendY <- -4000000
+    if(sfby %in% c("fao_areas", "fao_major_areas")) legendY <- -7500000
     if(maptype == "choropleth"){
       legend_labels = label
       legend_labels_length = nchar(legend_labels)
@@ -357,6 +369,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
         print(classes)
         label = rev(label)
         print(label)
+        if(!is.null(legend_items)) label = rev(legend_items)
         
         legendX = -16500000
         legendY = -6000000
@@ -395,7 +408,8 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL,
     }
     
     #legend title
-    text(legendX+200000, -3750000, legendtitle, adj = c(0,0), font=2, cex=.8, col=legendcol, family = family)
+    #in y before -3750000
+    text(legendX+200000, legendY+250000, legendtitle, adj = c(0,0), font=2, cex=.8, col=legendcol, family = family)
   }
 
   showtext::showtext_auto(FALSE)

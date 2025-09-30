@@ -31,7 +31,7 @@ test_that("create map - with pie charts / real example",{
   
   pdf("test_map_graduated_symbols_mean_with_piechart_fao_areas.pdf", width = 15, height = 10)
   mapit::create_map(sfby = "fao_areas", stat = df, by = "f_code", variable = "catch", digits = 2,
-                    classtype = "fixed", maptype = "graduated_mean_symbols",
+                    classtype = "fixed", maptype = "graduated_mean_symbols", faoareasLabels = T, 
                     breaks = c(0, 5, 10, 14, max(df$catch)),
                     plot.handler = function(x){
                       df.x <- as.data.frame(x)

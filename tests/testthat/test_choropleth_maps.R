@@ -7,7 +7,7 @@ test_that("create map - choropleth 1",{
   
   df <- as.data.frame(readr::read_csv(system.file("extdata/examples/sofia_2022_fish_consumption.csv", package = "mapit")))
   
-  pdf("test_map_choropleth_1_highres.pdf", width = 13, height = 7)
+  pdf("test_map_choropleth_1_highres1.pdf", width = 13, height = 7)
   par(mar = rep(0.01,4))
   create_map(sfby = "countries", stats = df, by = "M49", variable = "VALUE", digits = 0,
                     classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
@@ -18,7 +18,7 @@ test_that("create map - choropleth 1",{
   )
   dev.off()
   
-  pdf("test_map_choropleth_1_lowres.pdf", width = 13, height = 7)
+  pdf("test_map_choropleth_1_lowres1.pdf", width = 13, height = 7)
   par(mar = rep(0.01,4))
   create_map(sfby = "countries_lowres", stats = df, by = "M49", variable = "VALUE", digits = 0,
                     classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
@@ -75,4 +75,23 @@ test_that("create map - choropleth - FAO global production",{
                     legendunit = ""
   )
   dev.off()
+})
+
+test_that("create map - choropleth - BBOX",{
+  
+  df <- as.data.frame(readr::read_csv(system.file("extdata/examples/sofia_2022_fish_consumption.csv", package = "mapit")))
+  
+  pdf("test_map_choropleth_1_highres1_bbox.pdf", width = 10, height = 15)
+  par(mar = rep(0.01,4))
+  
+  bbox = as.list(sf::st_bbox(sf::st_transform(layers$fao_areas[layers$fao_areas$F_AREA == 47,],4326)))
+  create_map(sfby = "countries", bbox=bbox, stats = df, by = "M49", variable = "VALUE", digits = 0,
+             classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
+             breaks = c(0,5,10,25,50,max(df$VALUE)), 
+             boundCol = "grey", 
+             legendtitle = "AVERAGE AQUATIC FOODS CONSUMPTION PER CAPITA\n(IN KG/YEAR)",
+             legendunit = ""
+  )
+  dev.off()
+  
 })

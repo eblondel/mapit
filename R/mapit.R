@@ -1,7 +1,6 @@
 #' @name mapit
 #' @aliases mapit-package
 #' @aliases mapit
-#' @docType package
 #' 
 #' @title Tools to produce UN standard maps
 #' @description Provides tools to automate production of UN standard maps while applying
@@ -17,4 +16,4 @@
 #'    LazyLoad: \tab yes\cr
 #'  }
 #'
-NULL
+"_PACKAGE"

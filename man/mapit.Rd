@@ -19,3 +19,21 @@ Provides tools to automate production of UN standard maps while applying
    LazyLoad: \tab yes\cr
  }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/eblondel/mapit}
+  \item \url{https://eblondel.github.io/mapit/}
+  \item Report bugs at \url{https://github.com/eblondel/mapit/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Emmanuel Blondel \email{emmanuel.blondel1@gmail.com} (\href{https://orcid.org/0000-0002-5870-5762}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Alexandre Bennici (\href{https://orcid.org/0000-0003-2160-3487}{ORCID}) [contributor]
+}
+
+}

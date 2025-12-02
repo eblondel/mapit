@@ -12,9 +12,17 @@ spatialize_dataset <- function(sf = NULL, sfby = NULL, sfby.code = NULL, stats, 
   
   if(is.null(sfby.code)) stop("Argument 'sfby.code' is required!")
   
-  layers <- get_baselayers()
+
   if(!is.null(sfby)){
-    sf <- layers[[sfby]]
+    sf <- switch(sfby,
+                 "countries" = fdi4R::un_countries,
+                 "countries_lowres" = fdi4R::un_continent_lowres,
+                 "fao_areas" = fdi4R::fao_areas_lowres,
+                 "fao_major_areas" = fdi4R::fao_major_areas_lowres,
+                 "fao_areas_inland" = fdi4R::fao_areas_inland,
+                 "un_sdg_regions" = fdi4R::un_sdg_regions_lowres,
+                 "un_sdg_regions_placemarks" = fdi4R::un_sdg_regions_placemarks,           
+    )
     if(startsWith(sfby, "countries")){
       sf <- rbind(
         sf[is.na(sf$M49),],

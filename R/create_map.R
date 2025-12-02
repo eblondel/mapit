@@ -33,9 +33,6 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   showtext::showtext_auto()
   par(family =  "Arial Unicode MS")
   
-  #get layers
-  layers <- get_baselayers()
-  
   #process and spatialize statistics
   if(!is.null(sfby)) sfby.code <- switch(sfby,
     "countries" = "M49",
@@ -67,12 +64,12 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   
   #base continent
   if(!add){
-    continent_layer <- "continent"
+    continent_layer <- fdi4R::un_continent_lowres
     if(!is.null(sfby)) if(startsWith(sfby,"countries")){
-      continent_layer = "continent_nopole"
+      continent_layer = fdi4R::un_continent_nopole_lowres
       if(maptype == "choropleth") continent_layer = NULL
     }
-    if(!is.null(continent_layer)) plot(layers[[continent_layer]][1], col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
+    if(!is.null(continent_layer)) plot(continent_layer, col = contCol, border = boundCol, lwd = 0.2, add = TRUE)
   }
   
   #intervals
@@ -136,18 +133,18 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
 
     switch(sfby,
       "countries" = {
-        if(displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE) 
-        boundaries = layers$boundaries
+        if(displayWaterboundaries) plot(fdi4R::un_water_bodies, col = waterbCol, border = "transparent", add = TRUE) 
+        boundaries = fdi4R::un_boundaries
         plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
         plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 4,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 4 & boundaries$ISO3_CNT1 == "IND" & boundaries$ISO3_CNT2 == "PAK",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
-        if(!displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE) 
+        if(!displayWaterboundaries) plot(fdi4R::un_water_bodies, col = waterbCol, border = "transparent", add = TRUE) 
       },
       "countries_lowres" = {
-        if(displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
-        boundaries = layers$boundaries_lowres
+        if(displayWaterboundaries) plot(fdi4R::un_water_bodies, col = waterbCol, border = "transparent", add = TRUE)
+        boundaries = fdi4R::un_boundaries_lowres
         plot(boundaries[boundaries$TYPE == 1,][1], lwd = 0.45, col = boundCol, lty = "812121", add = TRUE)
         plot(boundaries[boundaries$TYPE == 2,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
         plot(boundaries[boundaries$TYPE == 3,][1], lwd = 0.35, col = boundCol, lty = "21", add = TRUE)
@@ -155,7 +152,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
         plot(boundaries[boundaries$TYPE == 5,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 6,][1], lwd = 0.2, col = boundCol, lty = "11",  add = TRUE)
         plot(boundaries[boundaries$TYPE == 5 & boundaries$ISO3_CNT1 == "PAK" & boundaries$ISO3_CNT2 == "IND",][1], lwd = 0.2, col = "white", lty = "11",  add = TRUE)
-        if(!displayWaterboundaries) plot(layers$WBYA25, col = waterbCol, border = "transparent", add = TRUE)
+        if(!displayWaterboundaries) plot(fdi4R::un_water_bodies, col = waterbCol, border = "transparent", add = TRUE)
       }
     )
   }
@@ -189,14 +186,14 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   #other maptypes
   if(!is.null(sfby)) if(sfby %in% c("fao_areas","fao_major_areas")) faoareas = TRUE
   if(faoareas){
-    fao_areas_lines <- layers$fao_areas_lines
+    fao_areas_lines <- fdi4R::fao_areas_lines
     plot(fao_areas_lines[1], bg=bgCol, lwd = faoareasLwd, col=faoareasCol, add = TRUE)
   }
   
   #other maptypes to be displayed after UN boundaries
   if(endsWith(maptype, "symbols")){
     if(sfby == "un_sdg_regions_placemarks"){
-      un_sdg_regions = layers$un_sdg_regions_lowres
+      un_sdg_regions = fdi4R::un_sdg_regions_lowres
       switch(un_sdg_maptype,
         "color-fill" = {
           plot(un_sdg_regions[un_sdg_regions$code == "SDG_ENA",], bg = bgCol, lwd = 1, col = "#7bcafd", border = "white", add = TRUE)
@@ -303,7 +300,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   #adding labels
   if(!is.null(sfby)) if(sfby %in% c("fao_areas", "fao_major_areas")) faoareas = TRUE
   if(faoareas & faoareasLabels){
-    major_areas = sf::st_point_on_surface(layers$fao_areas[layers$fao_areas$F_LEVEL == "MAJOR",])
+    major_areas = sf::st_point_on_surface(fdi4R::fao_major_areas_lowres)
     major_areas.sv = as(major_areas, "SpatVector")
     terra::text(major_areas.sv, labels = major_areas$F_CODE, halo = T, col = "white", hc = "black", hw=0.1, cex = 0.8) 
   }

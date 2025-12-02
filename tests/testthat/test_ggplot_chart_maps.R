@@ -4,8 +4,6 @@ require(testthat)
 context("ggplot_chart_maps")
 
 test_that("create map - with ggplot",{
-
-  layers = mapit::get_baselayers()
   
   data = data.frame(
     code = c("SDG_CSA", "SDG_ENA", "SDG_ESEA", "SDG_LAC", "SDG_NAWA", "SDG_OCE", "SDG_SSA"),

@@ -10,10 +10,12 @@ Authors@R: c(
 Maintainer: Emmanuel Blondel <emmanuel.blondel1@gmail.com>
 Depends: R (>= 4.0)
 Imports: sysfonts, showtext, sf, sp, classInt, ows4R, Hmisc, geosphere, shape, plotrix, terra
+Remotes:
+  fdiwg/fdi4R
 Suggests: testthat, roxygen2
 License: GPL (>=3)
 URL: https://github.com/eblondel/mapit, https://eblondel.github.io/mapit/
 BugReports: https://github.com/eblondel/mapit/issues
 LazyLoad: yes
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr

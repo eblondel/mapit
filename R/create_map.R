@@ -58,7 +58,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   #background
   bg_layer = NULL
   if(!add){
-    b_poly <- create_map_background(bbox = bbox, bgCol = bgCol, bgBorderCol = bgBoderCol)
+    b_poly <- create_map_background(bbox = bbox, bgCol = bgCol, bgBorderCol = bgBorderCol)
     bg_layer <- b_poly
   }
   

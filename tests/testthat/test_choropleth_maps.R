@@ -84,7 +84,7 @@ test_that("create map - choropleth - BBOX",{
   pdf("test_map_choropleth_1_highres1_bbox.pdf", width = 10, height = 15)
   par(mar = rep(0.01,4))
   
-  bbox = as.list(sf::st_bbox(sf::st_transform(fdi4R::fao_areas[fdi4R::fao_areas$F_AREA == 47,],4326)))
+  bbox = as.list(sf::st_bbox(sf::st_transform(fdi4R::fao_areas_eck4[fdi4R::fao_areas_eck4$F_AREA == 47,],4326)))
   create_map(sfby = "countries", bbox=bbox, stats = df, by = "M49", variable = "VALUE", digits = 0,
              classtype = "fixed", pal = RColorBrewer::brewer.pal(5, "Blues"),
              breaks = c(0,5,10,25,50,max(df$VALUE)), 

@@ -16,7 +16,7 @@ spatialize_dataset <- function(sf = NULL, sfby = NULL, sfby.code = NULL, stats, 
   if(!is.null(sfby)){
     sf <- switch(sfby,
                  "countries" = fdi4R::un_countries_eck4,
-                 "countries_lowres" = fdi4R::un_continent_lowres_eck4,
+                 "countries_lowres" = fdi4R::un_countries_lowres_eck4,
                  "fao_areas" = fdi4R::fao_areas_lowres_eck4,
                  "fao_major_areas" = fdi4R::fao_major_areas_lowres_eck4,
                  "fao_areas_inland" = fdi4R::fao_areas_inland_eck4,

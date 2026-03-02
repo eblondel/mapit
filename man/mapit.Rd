@@ -9,16 +9,6 @@
 Provides tools to automate production of UN standard maps while applying
  thematic cartography best practices.
 }
-\details{
-\tabular{ll}{
-   Package: \tab mapit\cr
-   Type: \tab Package\cr
-   Version: \tab 0.6\cr
-   Date: \tab 2022-11-4\cr
-   License: \tab MIT\cr
-   LazyLoad: \tab yes\cr
- }
-}
 \seealso{
 Useful links:
 \itemize{

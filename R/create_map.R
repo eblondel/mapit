@@ -34,7 +34,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   par(family =  "Arial Unicode MS")
   
   #process and spatialize statistics
-  if(!is.null(sfby)) sfby.code <- switch(sfby,
+  if(!is.null(sfby) & is.null(sfby.code)) sfby.code <- switch(sfby,
     "countries" = "M49",
     "countries_lowres" = "M49",
     "fao_areas" = "F_CODE",

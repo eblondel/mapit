@@ -7,7 +7,7 @@
 create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
                        stats = NULL, by = NULL, variable, digits = 2, lang = "en",
                        maptype = "choropleth", classtype = "jenks", classnumber = 5,  classints = NULL, breaks,
-                       col = "black", pal = NULL, invertpal = FALSE,
+                       col = "black", pal = NULL, invertpal = FALSE, border = "transparent",
                        bgCol = "transparent", bgBorderCol = "transparent", waterbCol = bgCol,
                        displayWaterboundaries = TRUE,
                        faoareas = FALSE, faoareasLwd = 1, faoareasCol = "blue", faoareasLabels = TRUE,
@@ -122,7 +122,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   
   #statistics for main choropleth
   if(maptype == "choropleth"){
-    plot(sf, lty=0, bg=bgCol, border="transparent", col=classColours, add = TRUE)
+    plot(sf, lty=0, bg=bgCol, border=border, col=classColours, add = TRUE)
     if(!is.null(naHashCol)){
       sp::plot(as(sf[naIndexes & !is.na(sf[[sfby.code]]),], "Spatial"), lty=1, border = naHashCol, col=naHashCol, lwd=naHashLwd, density=naHashDensity, add = TRUE)
     }
@@ -192,7 +192,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   
   #other maptypes to be displayed after UN boundaries
   if(endsWith(maptype, "symbols")){
-    if(sfby == "un_sdg_regions_placemarks"){
+    if(!is.null(sfby)) if(sfby == "un_sdg_regions_placemarks"){
       un_sdg_regions = mapit::un_sdg_regions_lowres_eck4
       switch(un_sdg_maptype,
         "color-fill" = {
@@ -317,12 +317,12 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
     label = paste(names(x), legendunit)
     legendX <- -16800000
     legendY <- -4000000
-    if(sfby %in% c("fao_areas", "fao_major_areas")) legendY <- -7500000
+    if(!is.null(sfby)) if(sfby %in% c("fao_areas", "fao_major_areas")) legendY <- -7500000
     if(maptype == "choropleth"){
       legend_labels = label
       legend_labels_length = nchar(legend_labels)
       if(!is.null(legend_items)) legend_labels = legend_items
-      create_legend(legendX, legendY, fill=attr(classColours,"palette"), cex=0.8, y.intersp=1.5, 
+      create_legend(legendX, legendY, fill=attr(classColours,"palette"), border = border, cex=0.8, y.intersp=1.5, 
                     legend=legend_labels, text.width = legend_labels_length, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                     box.factor = 2,
                     family = family, text.font = 1)

@@ -323,7 +323,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
       legend_labels_length = nchar(legend_labels)
       if(!is.null(legend_items)) legend_labels = legend_items
       create_legend(legendX, legendY, fill=attr(classColours,"palette"), border = border, cex=0.8, y.intersp=1.5, 
-                    legend=legend_labels, text.width = legend_labels_length, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
+                    legend=legend_labels, text.width = legend_labels_length, box.col="transparent", xjust=0, text.col=legendcol,
                     box.factor = 2,
                     family = family, text.font = 1)
       #legend for 'no data'

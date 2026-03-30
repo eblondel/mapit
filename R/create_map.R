@@ -334,7 +334,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
                       legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, text.col=legendcol, adj = 0.25,
                       family = family, text.font = 1)
       }else{
-        create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, border = "grey", box.factor = 2, cex=0.8, y.intersp=1.5, 
+        create_legend(legendX, legendY - ((length(names(x))+0.33)*legendItemY), fill = naCol, border = naColBox, box.factor = 2, cex=0.8, y.intersp=1.5, 
                    legend=naLabel, text.width = naLabelLength, box.col="transparent", xjust=0, text.col=legendcol, adj = 0.25,
                    family = family, text.font = 1)
       }

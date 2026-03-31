@@ -12,6 +12,7 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
 
   
   outsf <- sf
+  if(any(is.na(outsf[[variable]]))) outsf[[variable]][is.na(outsf[[variable]])] = 0
   outsf$maptype <- maptype
   levels <- attr(classInt::classIntervals2shingle(classints),"levels")
   if(is.null(level.min)) level.min = 1
@@ -26,17 +27,14 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
          "graduated_linear_symbols" = {
            level.seq = seq(level.min, level.max, by = (level.max-level.min)/(length(levels)-1))
            outsf$CLASS <- 0
-           print(levels)
            for(i in 1:length(levels)){
              lev <- levels[[i]]
-             print(outsf[[variable]])
              if(i==1){
                if(any(outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>=lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }else{
                if(any(outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }
            }
-           print("ended")
          },
          "graduated_mean_symbols" = {
            outsf$CLASS <- 0

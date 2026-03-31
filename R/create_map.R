@@ -270,7 +270,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
       }
     }else{
       #with simple symbols
-      if(is.integer(pch)) plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
+      if(!is.character(pch)) plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
     }
     
     #case of proportional half circles

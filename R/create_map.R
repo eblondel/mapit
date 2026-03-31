@@ -381,6 +381,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
           rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, border = legendpchcol)
         }
       }else{
+        labelLength = nchar(label)
         legend(legendX, legendY, cex = 0.8, col = legendpchcol, pch = legendpch, pt.cex=classes*2.6, x.intersp=2, y.intersp=2, 
                legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                text.font = 1)

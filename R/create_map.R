@@ -30,6 +30,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   #get current factor of compression for the plot region (depending on the margin)
   margin_comp_factor = par("plt")[4]-par("plt")[3]
   
+  proportional_symbols = function(v, k){
+    return(sqrt(v)*k)
+  }
+  
   showtext::showtext_auto()
   par(family =  "Arial Unicode MS")
   
@@ -76,10 +80,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   # defining INTERVALS
   classColours <- NULL
   naIndexes <- NULL
-  if (classtype %in% c("equal","pretty","quantile","fisher","jenks")){
+  if (classtype %in% c("equal","pretty","quantile","fisher","jenks", "none")){
     
     if(classnumber < 2)  stop("The number of class must be greater than 1")
-    if(is.null(classints)){
+    if(is.null(classints) & classtype != "none"){
       classints<-classInt::classIntervals(as.numeric(sf[[variable]]),n = classnumber,style = classtype, dataPrecision = digits)
     }
     if(!is.null(pal)){
@@ -227,10 +231,10 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
     if(is.null(plot_location_handler)){
       stop("plot.locator should be either 'point_on_surface' or 'centroid'")
     }
+    
+    #apply plot location handler
     sf_points <- plot_location_handler(sf)
-    if(halo) if(!is.character(pch)){
-      plot(sf_points, lwd=halolwd, bg="transparent", col = halocol, pch = 21, cex = sf$CLASS*2.5, add = TRUE)
-    }
+  
     if(!is.null(plot.handler)){
       #with embedded plot
       for(i in 1:nrow(sf_points)){
@@ -268,9 +272,24 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
           }
         )
       }
+      if(halo) if(!is.character(pch)){
+        plot(sf_points, lwd=halolwd, bg="transparent", col = halocol, pch = 21, cex = sf$CLASS*2.5, add = TRUE)
+      }
     }else{
       #with simple symbols
-      if(!is.character(pch)) plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE) 
+      if(!is.character(pch)){
+        if(startsWith(maptype, "proportional")){
+          plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = proportional_symbols(sf$CLASS*2.6, level.factor), add = TRUE)
+          if(halo) if(!is.character(pch)){
+            plot(sf_points, lwd=halolwd, bg="transparent", col = halocol, pch = 21, cex = proportional_symbols(sf$CLASS*2.5, level.factor), add = TRUE)
+          }
+        }else if(startsWith(maptype, "graduated")){
+          plot(sf_points, lty=1, bg=col, col = col, pch = pch, cex = sf$CLASS*2.6, add = TRUE)
+          if(halo) if(!is.character(pch)){
+            plot(sf_points, lwd=halolwd, bg="transparent", col = halocol, pch = 21, cex = sf$CLASS*2.5, add = TRUE)
+          }
+        }
+      }
     }
     
     #case of proportional half circles
@@ -305,7 +324,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
     terra::text(major_areas.sv, labels = major_areas$F_CODE, halo = T, col = "white", hc = "black", hw=0.1, cex = 0.8) 
   }
   
-  if(legend) if(!is.null(classints)){
+  if(legend){
     #TODO legend coordinates elements are +eck4 oriented... need to provided generic solution
     #legend for classes
     classLeg = classints
@@ -351,7 +370,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
         print(label)
         if(!is.null(legend_items)) label = rev(legend_items)
         
-        legendX = -16500000
+        legendX = -16000000
         legendY = -6000000
         crc_x <- legendX
         crc_y <- legendY
@@ -362,15 +381,15 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
           class = classes[i]
           
           r_user = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(class, "chars", "user")))/2
-          if(i==1) max_r_user = r_user
+          if(i==1) max_r_user = abs(r_user)
           if(i>1){
             r_user = max_r_user * classes[i]/classes[1]
-            crc_y = base_y + r_user
+            crc_y = base_y + abs(r_user)
           }
           
           crc <- sf::st_sf(sf::st_sfc(sf::st_point(x = c(crc_x, crc_y))))
           sf::st_crs(crc) <- sf::st_crs(bg_layer)
-          crc_buffer = sf::st_buffer(crc, dist = r_user)
+          crc_buffer = sf::st_buffer(crc, dist = abs(r_user))
           if(i==1){
             base_y = sf::st_bbox(crc_buffer)$ymin
           }
@@ -386,10 +405,63 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
                legend=label, text.width = labelLength * 2, box.col="transparent", xjust=0, border="transparent", text.col=legendcol,
                text.font = 1)
       }
+    }else if(startsWith(maptype,"proportional")){
+      print("proportional nesting legend")
+      values <- c(
+        as.numeric(quantile(sf$CLASS[!is.na(sf$CLASS)], 0.50)),
+        as.numeric(quantile(sf$CLASS[!is.na(sf$CLASS)], 0.75)),
+        as.numeric(quantile(sf$CLASS[!is.na(sf$CLASS)], 1))
+      )
+      if(!is.null(breaks)) values = breaks
+      classes = proportional_symbols(values, level.factor)
+      classes <- classes[order(classes)]
+      
+      if(legend_nesting){
+        
+        classes = rev(classes)
+        print(classes)
+        label = paste(rev(as.character(ceiling(values))), legendunit)
+        print(label)
+        if(!is.null(legend_items)) label = rev(legend_items)
+        
+        legendX = -16000000
+        legendY = -6000000
+        crc_x <- legendX
+        crc_y <- legendY
+        
+        base_y = NULL
+        max_r_user = NULL
+        for(i in 1:length(classes)){
+          class = classes[i]
+          print(class)
+          r_user = (abs(par("usr")[3] * 1 / margin_comp_factor) - abs(graphics::grconvertY(class, "chars", "user")))/2
+          if(i==1) max_r_user = abs(r_user)
+          if(i>1){
+            r_user = max_r_user * classes[i]/classes[1]
+            crc_y = base_y + abs(r_user)
+          }
+          
+          crc <- sf::st_sf(sf::st_sfc(sf::st_point(x = c(crc_x, crc_y))))
+          sf::st_crs(crc) <- sf::st_crs(bg_layer)
+          crc_buffer = sf::st_buffer(crc, dist = abs(r_user))
+          if(i==1){
+            base_y = sf::st_bbox(crc_buffer)$ymin
+          }
+          #plot(crc, lty = 1, bg = "transparent", col = legendpchcol, pch = pch, cex = class*1.2, add = TRUE)
+          plot(crc_buffer, lty=1, bg="transparent", col = "transparent", border = legendpchcol, add = TRUE)
+          top_y = sf::st_bbox(crc_buffer)$ymax
+          text(crc_x + max_r_user*1.5, top_y, labels = label[i], cex = legendcex, col = legendpchcol, adj = 0)
+          rect(crc_x, top_y, crc_x + max_r_user*1.25, top_y, border = legendpchcol)
+        }
+      }
     }
     
     #legend title
     #in y before -3750000
+    if(legend_nesting){
+      legendX <- -16800000
+      legendY <- -4000000
+    }
     text(legendX+200000, legendY+250000, legendtitle, adj = c(0,0), font=2, cex=.8, col=legendcol, family = family)
   }
 

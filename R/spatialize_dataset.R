@@ -39,6 +39,16 @@ spatialize_dataset <- function(sf = NULL, sfby = NULL, sfby.code = NULL, stats, 
   if(regexpr("symbols", maptype)>0){
     for(sfcode in sfcodes){
       dat = newdata[!is.na(newdata[[sfby.code]]) & newdata[[sfby.code]] == sfcode,]
+      
+      #exceptions
+      if(!is.null(sfby)) if(sfby == "countries_lowres") if(sfby.code == "M49"){
+        #Malaysia
+        if(sfcode == 458){
+          newdata[!is.na(newdata[[sfby.code]]) & newdata$rowid != 1427 & newdata[[sfby.code]] == sfcode,][[variable]] <- NA
+          next
+        }
+      }
+      
       idx <- dat[dat$surface == max(dat$surface), ][["rowid"]]
       idx = idx[1]
       if(nrow(newdata[!is.na(newdata[[sfby.code]]) & newdata$rowid != idx & newdata[[sfby.code]] == sfcode,])>0){

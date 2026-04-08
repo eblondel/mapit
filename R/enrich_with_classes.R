@@ -8,15 +8,16 @@
 #' 
 #' @return an object from \pkg{sf}
 #' 
-enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars"){
+enrich_with_classes <- function(sf, classints = NULL, variable, maptype, level.min = NULL, level.max = NULL, level.factor = 1, level.unit = "chars"){
 
   
   outsf <- sf
   if(any(is.na(outsf[[variable]]))) outsf[[variable]][is.na(outsf[[variable]])] = 0
   outsf$maptype <- maptype
-  levels <- attr(classInt::classIntervals2shingle(classints),"levels")
+  levels <- NULL
+  if(!is.null(classints)) levels = attr(classInt::classIntervals2shingle(classints),"levels")
   if(is.null(level.min)) level.min = 1
-  if(is.null(level.max)) level.max = length(levels)
+  if(is.null(level.max)) level.max = if(!is.null(levels)) length(levels) else 1
   
   if(level.unit == "inches"){
     level.min = graphics::grconvertX(level.min, "inches", "chars")
@@ -52,6 +53,9 @@ enrich_with_classes <- function(sf, classints, variable, maptype, level.min = NU
                if(any(outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2])) outsf[outsf[[variable]]>lev[1] & outsf[[variable]] <= lev[2],]$CLASS <- level.seq[i]
              }
            }
+         },
+         "proportional_symbols" = {
+           outsf$CLASS <- outsf[[variable]]
          }
   )
   if("CLASS" %in% colnames(outsf)){

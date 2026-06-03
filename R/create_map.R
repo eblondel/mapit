@@ -320,6 +320,7 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
   if(!is.null(sfby)) if(sfby %in% c("fao_areas", "fao_major_areas")) faoareas = TRUE
   if(faoareas & faoareasLabels){
     major_areas = sf::st_point_on_surface(mapit::fao_major_areas_lowres_eck4)
+    requireNamespace("terra")
     major_areas.sv = as(major_areas, "SpatVector")
     terra::text(major_areas.sv, labels = major_areas$F_CODE, halo = T, col = "white", hc = "black", hw=0.1, cex = 0.8) 
   }

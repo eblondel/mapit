@@ -165,10 +165,9 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
     sf[["colour"]] = classColours
     color_df = unique(data.frame(code = sf[[sfby.code]], col = classColours))
     #small features (islands, etc)
-    sf_small = sf
     if(!is.null(sfby)) if(sfby=="countries_lowres"){
       sf_small = spatialize_dataset(
-        sf = sf, sfby = "countries", sfby.code = sfby.code, 
+        sfby = "countries", sfby.code = sfby.code, 
         stats = stats, by = by, variable = variable, 
         maptype = maptype, 
         m49_codes_to_hide = m49_codes_to_hide
@@ -178,9 +177,20 @@ create_map <- function(sf = NULL, sfby = NULL, sfby.code = NULL, bbox = NULL,
       sp::plot(as(sf_small[!is.na(sf_small$ROMNAM) & sf_small$ROMNAM == "Aksai Chin", ], "Spatial"), lty=1, border = hashCol, col=hashCol, lwd=0.1, density=50,add=TRUE)
       if(add_small_features_as_dots){
         small.sf <- sf_small[sf_small$Shape_STAr < 0.8 & !is.na(sf_small$MAPLAB),]
+        ci_small <- classInt::classIntervals(
+          small.sf[[variable]],
+          style = "fixed",
+          fixedBreaks = classints$brks
+        )
+        small_classColours = classInt::findColours(ci_small, pal)
+        naIndexes=is.na(small_classColours)
+        small_classColours[naIndexes]<-naCol # added otherwise is transparent!
+        small.sf$col = small_classColours
+        
         if(!add_small_NA_features_as_dots){
           small.sf <- small.sf[!is.na(small.sf[[variable]]),]
         }
+        plot(small.sf, lty=0, bg=bgCol, border=border, col = small.sf$col, add = TRUE)
         plot(sf::st_point_on_surface(small.sf)[1], border="transparent", pch = 21, cex = small_features_dots_cex, col = small.sf$col, bg = "transparent", add = TRUE)
       }
       
